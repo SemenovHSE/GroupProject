@@ -1,0 +1,60 @@
+﻿@using GroupProject.Models
+@model RegistrationModel
+@{
+    ViewBag.Title = "Register";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    List<string> addresses = (ViewData["Addresses"] as List<string>) ?? new List<string>();
+    IEnumerable<SelectListItem> addressesItems = addresses.Select(a => new SelectListItem()
+    {
+        Text = a,
+        Value = a
+    });
+}
+
+<h2>Register</h2>
+<body>
+    @using (Html.BeginForm("Register", "Menu", FormMethod.Post))
+    {
+        @Html.LabelFor(r => r.Surname)
+        <br />
+        @Html.TextBoxFor(r => r.Surname)
+        @Html.ValidationMessageFor(r => r.Surname)
+        <br />
+        @Html.LabelFor(r => r.Name)
+        <br />
+        @Html.TextBoxFor(r => r.Name)
+        @Html.ValidationMessageFor(r => r.Name)
+        <br />
+        @Html.LabelFor(r => r.Patronymic)
+        <br />
+        @Html.TextBoxFor(r => r.Patronymic)
+        @Html.ValidationMessageFor(r => r.Patronymic)
+        <br />
+        @Html.LabelFor(r => r.PhoneNumber)
+        <br />
+        @Html.TextBoxFor(r => r.PhoneNumber)
+        @Html.ValidationMessageFor(r => r.PhoneNumber)
+        <br />
+        @Html.LabelFor(r => r.Password)
+        <br />
+        @Html.PasswordFor(r => r.Password)
+        @Html.ValidationMessageFor(r => r.Password)
+        <br />
+        @Html.LabelFor(r => r.Address)
+        <br />
+        @Html.DropDownListFor(r => r.Address, addressesItems)
+        @Html.ValidationMessageFor(r => r.Address)
+        <br />
+        @Html.LabelFor(r => r.Entrance)
+        <br />
+        @Html.TextBoxFor(r => r.Entrance)
+        @Html.ValidationMessageFor(r => r.Entrance)
+        <br />
+        @Html.LabelFor(r => r.SettingNumber)
+        <br />
+        @Html.TextBoxFor(r => r.SettingNumber)
+        @Html.ValidationMessageFor(r => r.SettingNumber)
+        <br />
+        <input type="submit" value="Зарегистрироваться"/>
+    }
+</body>

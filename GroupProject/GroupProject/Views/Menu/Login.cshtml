@@ -1,0 +1,25 @@
+﻿@using GroupProject.Models
+@model LoginModel
+@{
+    ViewBag.Title = "Login";
+    //Layout = "~/Shared/_LayoutMenu.cshtml";
+}
+
+<h2>Login</h2>
+<body>
+    @using(Html.BeginForm("Login", "Menu", FormMethod.Post))
+    {
+        @Html.LabelFor(l => l.PhoneNumber)
+        <br />
+        @Html.TextBoxFor(l => l.PhoneNumber)
+        @Html.ValidationMessageFor(l => l.PhoneNumber)
+        <br />
+        @Html.LabelFor(l => l.Password)
+        <br />
+        @Html.PasswordFor(l => l.Password)
+        @Html.ValidationMessageFor(l => l.Password)
+        <br />
+        <input type="submit" value="Войти" />
+    }
+    @Html.ActionLink("Зарегистрироваться", "Register")
+</body>

@@ -1,0 +1,28 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Личный кабинет</h2>
+
+<body>
+    <div id="Tabs">
+        <button id="ShowResidentGeneralInformation">Общая информация</button>
+        <button id="ShowResidentRequests">Заявки</button>
+    </div>
+    <div id="ContentWrapper"></div>
+</body>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#ShowResidentGeneralInformation").on("click", function () {
+            $("#ContentWrapper").load("@Url.Action("RenderResidentGeneralInformation")");
+        });
+
+        $("#ShowResidentRequests").on("click", function() {
+            $("#ContentWrapper").load("@Url.Action("RenderResidentRequests")");
+        });
+    });
+</script>
+
