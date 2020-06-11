@@ -1,0 +1,13 @@
+﻿@using GroupProject.Database.ModelsExtensions;
+
+@model IPerson
+
+@if (Model != null)
+{
+    <ul>
+        <li>@Model.FullName</li>
+        <li>@Html.ActionLink("Выход", "Logout", "Menu")</li>
+    </ul>
+}
+
+
