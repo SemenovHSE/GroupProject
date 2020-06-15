@@ -82,9 +82,27 @@ namespace GroupProject.Controllers
         }
 
 
+        [HttpGet]
         public ActionResult LoginInformation()
         {
-            return PartialView("~/Views/Shared/_LoginInformation.cshtml", CurrentUser);
+            return PartialView("_LoginInformation", CurrentUser);
+        }
+
+
+        [HttpGet]
+        public ActionResult HouseInformation()
+        {
+            HouseModel model = null;
+            if (CurrentUser is Employee)
+            {
+                Employee employee = CurrentUser as Employee;
+                model = new HouseModel()
+                {
+                    Address = employee.House.Address
+                };
+            }
+
+            return PartialView("_HouseInformation", model);
         }
 
 

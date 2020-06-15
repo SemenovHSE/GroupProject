@@ -153,11 +153,11 @@
     <Compile Include="Authentication\ProjectAuthentication.cs" />
     <Compile Include="Authentication\UserIdentity.cs" />
     <Compile Include="Authentication\UserProvider.cs" />
+    <Compile Include="Classes\ImageResult.cs" />
     <Compile Include="Controllers\MenuController.cs" />
     <Compile Include="Controllers\PersonalCabinetController.cs" />
     <Compile Include="Database\Context\DatabaseContext.cs" />
     <Compile Include="Database\ModelsGenerated\Employee.cs" />
-    <Compile Include="Database\ModelsGenerated\EmployeeHouse.cs" />
     <Compile Include="Database\ModelsGenerated\EmployeeInformationBlock.cs" />
     <Compile Include="Database\ModelsGenerated\House.cs" />
     <Compile Include="Database\ModelsGenerated\InformationBlock.cs" />
@@ -172,6 +172,9 @@
     <Compile Include="Database\ModelsGenerated\Status.cs" />
     <Compile Include="Database\ModelsGenerated\Tag.cs" />
     <Compile Include="Database\ModelsGenerated\TagInformationBlock.cs" />
+    <Compile Include="Enums\RequestStatus.cs" />
+    <Compile Include="Extensions\ActionResultExtensions.cs" />
+    <Compile Include="Helpers\PagingHelpers.cs" />
     <Compile Include="Logging\ILogger.cs" />
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="Controllers\BaseController.cs" />
@@ -181,10 +184,24 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\GeneralInformationModel.cs" />
+    <Compile Include="Models\EmployeeGeneralInformationModel.cs" />
+    <Compile Include="Models\HouseModel.cs" />
+    <Compile Include="Models\MenuTagModel.cs" />
+    <Compile Include="Models\ResidentGeneralInformationModel.cs" />
     <Compile Include="Models\LoginModel.cs" />
+    <Compile Include="Models\PageInfo.cs" />
     <Compile Include="Models\RegistrationModel.cs" />
+    <Compile Include="Models\ReplyModel.cs" />
     <Compile Include="Models\RequestModel.cs" />
+    <Compile Include="Models\RequestProgressModel.cs" />
+    <Compile Include="Models\RequestsPageModel.cs" />
+    <Compile Include="Models\SendReplyModel.cs" />
+    <Compile Include="Models\StatusModel.cs" />
+    <Compile Include="Models\UserModel.cs" />
+    <Compile Include="Models\SendRequestModel.cs" />
+    <Compile Include="Models\SettingModel.cs" />
+    <Compile Include="Models\PersonalCabinetTagModel.cs" />
+    <Compile Include="Models\PersonalCabinetTagsPageModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -343,12 +360,20 @@
     <Content Include="Views\Menu\About.cshtml" />
     <Content Include="Views\PersonalCabinet\Index.cshtml" />
     <Content Include="Views\Menu\Register.cshtml" />
-    <Content Include="Views\PersonalCabinet\_GeneralInformation.cshtml" />
-    <Content Include="Views\PersonalCabinet\_ResidentRequests.cshtml" />
+    <Content Include="Views\PersonalCabinet\_ResidentGeneralInformation.cshtml" />
+    <Content Include="Views\PersonalCabinet\_SendRequest.cshtml" />
+    <Content Include="Views\PersonalCabinet\TEst.cshtml" />
+    <Content Include="Views\PersonalCabinet\_TagsGrid.cshtml" />
+    <Content Include="Views\PersonalCabinet\_RequestProgress.cshtml" />
+    <Content Include="Views\PersonalCabinet\_UserInformation.cshtml" />
+    <Content Include="Views\PersonalCabinet\_EmployeeGeneralInformation.cshtml" />
+    <Content Include="Views\PersonalCabinet\_RequestsGrid.cshtml" />
+    <Content Include="Views\Shared\_HouseInformation.cshtml" />
+    <Content Include="Views\PersonalCabinet\_SendReply.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Classes\" />
+    <Folder Include="Files\" />
     <Folder Include="Views\Base\" />
   </ItemGroup>
   <ItemGroup>
@@ -385,7 +410,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>51575</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:80/</IISUrl>
+          <IISUrl>http://localhost:8080/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

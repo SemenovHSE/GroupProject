@@ -1,0 +1,60 @@
+﻿@using GroupProject.Models
+@model SendReplyModel
+
+<div id="ReplyContent">
+    @Html.LabelFor(r => r.Body)
+    <br />
+    @Html.TextAreaFor(r => r.Body)
+    <br />
+    @Html.LabelFor(r => r.Files)
+    <br />
+    <input type="file" id="Files" multiple/>
+    <br />
+    <button id="SendReply">Ответить на заявку</button>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#SendReply").on("click",
+            function() {
+                var formData = new FormData();
+                formData.append("RequestId", @Model.RequestId);
+                formData.append("Body", $("#Body").val());
+                var files = $("#Files").prop("files");
+                for (let i = 0; i < files.length; i++) {
+                    formData.append("Files[" + i + "]", files[i]);
+                }
+                $.ajax({
+                    url: "@Url.Action("SendReply")",
+                    type: "POST",
+                    dataType: "json",
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    success: function(data) {
+                        if (data.result) {
+                            alert("Ответ на заявку успешно отправлен!");
+                            $.ajax({
+                                url: "@Url.Action("GetRequestProgress")",
+                                type: "GET",
+                                data: {
+                                    requestId: @Model.RequestId
+                                },
+                                success: function(data) {
+                                    if (data) {
+                                        $("#RequestProgressContent").replaceWith(data);
+                                    }
+                                    else {
+                                        alert("Произошла ошибка при обновлении информации о заявке");
+                                    }
+                                }
+                            });
+                        }
+                        else {
+                            alert("Во время отправки ответа на заявку произошла ошибка");
+                        }
+                    }
+                });
+            });
+    });
+</script>

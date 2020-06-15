@@ -1,0 +1,123 @@
+﻿@using GroupProject.Helpers
+@using GroupProject.Models
+@model PersonalCabinetTagsPageModel
+
+<div id="TagsContent">
+    <div id="TagsGridWrapper">
+        <table id="Tags" class="table">
+            <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(t => t.Tags.FirstOrDefault().TagId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(t => t.Tags.FirstOrDefault().Name)
+                </th>
+                <th>
+                    Действие
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (PersonalCabinetTagModel tag in Model.Tags)
+            {
+                <tr>
+                    <td>
+                        @tag.TagId
+                    </td>
+                    <td>
+                        @tag.Name
+                    </td>
+                    <td>
+                        @if (tag.ResidentIsSubscribed)
+                        {
+                            <button class="unsubscribe" tagId="@tag.TagId">Отписаться</button>
+                        }
+                        else
+                        {
+                            <button class="subscribe" tagId="@tag.TagId">Подписаться</button>
+                        }
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+        <div id="Pages" class="btn-group">
+            @Html.PageLinks(Model.PageInfo)
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function renderTags(pageToOpen) {
+        $.ajax({
+            url: "@Url.Action("RenderTagsGrid")",
+            type: "GET",
+            data: {
+                page: pageToOpen
+            },
+            success: function(data) {
+                $("#TagsContent").replaceWith(data);
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        $("[page]").each(function(index, element) {
+            $(element).on("click",
+                function() {
+                    var pageToOpen = parseInt($(element).attr("page"), 10);
+                    renderTags(pageToOpen);
+                });
+        });
+
+        $(".unsubscribe").each(function(index, element) {
+            $(element).on("click",
+                function() {
+                    var tagToUnsubscribeFrom = parseInt($(element).attr("tagId"), 10);
+                    $.ajax({
+                        url: "@Url.Action("UnsubscribeFromTag")",
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            tagId: tagToUnsubscribeFrom
+                        },
+                        success: function(data) {
+                            if (data.result) {
+                                alert("Отписка от тега проведена успешно!");
+                                var pageToOpen = parseInt($(".selected[page]").attr("page"), 10);
+                                renderTags(pageToOpen);
+                            } else {
+                                alert("Во время отписки от тега произошла ошибка");
+                            }
+                        }
+                    });
+                });
+        });
+
+        $(".subscribe").each(function(index, element) {
+            $(element).on("click",
+                function() {
+                    var tagToSubscribeTo = parseInt($(element).attr("tagId"), 10);
+                    $.ajax({
+                        url: "@Url.Action("SubscribeToTag")",
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            tagId: tagToSubscribeTo
+                        },
+                        success: function(data) {
+                            if (data.result) {
+                                alert("Подписка на тег проведена успешно!");
+                                var pageToOpen = parseInt($(".selected[page]").attr("page"), 10);
+                                renderTags(pageToOpen);
+                            }
+                            else {
+                                alert("Во время подписки на тег произошла ошибка");
+                            }
+                        }
+                    });
+                });
+        });
+    });
+</script>

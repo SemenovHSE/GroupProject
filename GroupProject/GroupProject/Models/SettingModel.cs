@@ -6,14 +6,8 @@ using System.Web;
 
 namespace GroupProject.Models
 {
-    public class GeneralInformationModel
+    public class SettingModel
     {
-        [Display(Name = "ФИО")]
-        public string FullName { get; set; }
-
-        [Display(Name = "Номер телефона")]
-        public string PhoneNumber { get; set; }
-
         [Display(Name = "Адрес")]
         public string Address { get; set; }
 

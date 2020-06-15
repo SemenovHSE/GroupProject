@@ -1,0 +1,67 @@
+﻿@using GroupProject.Models
+@model ResidentGeneralInformationModel
+
+<div id="GeneralInformation">
+    @{Html.RenderPartial("_UserInformation", Model.User);}
+    @if (Model.Setting != null)
+    {
+        <div id="SettingInformation">
+            @Html.LabelFor(g => g.Setting.Address)
+            <br />
+            @Html.TextBoxFor(g => g.Setting.Address)
+            @Html.ValidationMessageFor(g => g.Setting.Address)
+            <br />
+            @Html.LabelFor(g => g.Setting.SettingNumber)
+            <br />
+            @Html.TextBoxFor(g => g.Setting.SettingNumber)
+            @Html.ValidationMessageFor(g => g.Setting.SettingNumber)
+            <br />
+            @Html.LabelFor(g => g.Setting.Entrance)
+            <br />
+            @Html.TextBoxFor(g => g.Setting.Entrance)
+            @Html.ValidationMessageFor(g => g.Setting.Entrance)
+            <br />
+            @Html.LabelFor(g => g.Setting.Size)
+            <br />
+            @Html.TextBoxFor(g => g.Setting.Size)
+            @Html.ValidationMessageFor(g => g.Setting.Size)
+            <br />
+            @Html.LabelFor(g => g.Setting.RoomsNumber)
+            <br />
+            @Html.TextBoxFor(g => g.Setting.RoomsNumber)
+            @Html.ValidationMessageFor(g => g.Setting.RoomsNumber)
+            <button id="UpdateSettingInformation">Редактировать</button>
+        </div>
+    }
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#UpdateSettingInformation").on("click",
+            function() {
+                var dataToUpdate = {
+                    Address: $("#Setting_Address").val(),
+                    SettingNumber: $("#Setting_SettingNumber").val(),
+                    Entrance: $("#Setting_Entrance").val(),
+                    Size: $("#Setting_Size").val(),
+                    RoomsNumber: $("#Setting_RoomsNumber").val()
+                };
+                $.ajax({
+                    url: "@Url.Action("UpdateSettingInformation")",
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        settingModel: dataToUpdate
+                    },
+                    success: function(data) {
+                        if (data.result) {
+                            alert("Информация о квартире обновлена!");
+                        }
+                        else {
+                            alert("Во время обновления информации о квартире произошла ошибка");
+                        }
+                    }
+                });
+            });
+    });
+</script>

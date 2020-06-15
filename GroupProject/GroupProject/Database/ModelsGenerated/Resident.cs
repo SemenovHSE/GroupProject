@@ -1,3 +1,5 @@
+using GroupProject.Database.ModelsExtensions;
+
 namespace GroupProject.Database.ModelsGenerated
 {
     using System;
@@ -5,7 +7,6 @@ namespace GroupProject.Database.ModelsGenerated
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
-    using GroupProject.Database.ModelsExtensions;
 
     [Table("Resident")]
     public partial class Resident : IPerson

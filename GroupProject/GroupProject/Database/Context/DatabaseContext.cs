@@ -1,12 +1,10 @@
+using System.Data.Entity;
+using System.Linq;
+using GroupProject.Database.ModelsExtensions;
+using GroupProject.Database.ModelsGenerated;
+
 namespace GroupProject.Database.Context
 {
-    using System;
-    using System.Data.Entity;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Linq;
-    using GroupProject.Database.ModelsExtensions;
-    using GroupProject.Database.ModelsGenerated;
-
     public partial class DatabaseContext : DbContext, IDatabaseContext
     {
         public DatabaseContext()
@@ -15,7 +13,6 @@ namespace GroupProject.Database.Context
         }
 
         public virtual DbSet<Employee> Employees { get; set; }
-        public virtual DbSet<EmployeeHouse> EmployeeHouses { get; set; }
         public virtual DbSet<EmployeeInformationBlock> EmployeeInformationBlocks { get; set; }
         public virtual DbSet<House> Houses { get; set; }
         public virtual DbSet<InformationBlock> InformationBlocks { get; set; }
@@ -33,6 +30,11 @@ namespace GroupProject.Database.Context
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<House>()
+                .HasMany(e => e.Employees)
+                .WithRequired(e => e.House)
+                .WillCascadeOnDelete(false);
+
             modelBuilder.Entity<Resident>()
                 .HasMany(e => e.Requests)
                 .WithOptional(e => e.Resident)

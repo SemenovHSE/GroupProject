@@ -1,28 +1,58 @@
-﻿
+﻿@using GroupProject.Database.ModelsExtensions
+@using GroupProject.Database.ModelsGenerated
+
 @{
     ViewBag.Title = "Index";
-    //Layout = "~/Views/Shared/_Layout.cshtml";
+    IPerson currentUser = ViewData["currentUser"] as IPerson;
 }
 
 <h2>Личный кабинет</h2>
 
 <body>
-    <div id="Tabs">
-        <button id="ShowResidentGeneralInformation">Общая информация</button>
-        <button id="ShowResidentRequests">Заявки</button>
+    <div class="row">
+        <div id="Tabs" class="col-md-2">
+            <ul>
+                <li class="active"><button id="ShowResidentGeneralInformation">Общая информация</button></li>
+                <li><button id="ShowResidentRequests">Заявки</button></li>
+                @if (currentUser is Resident)
+                {
+                    <li><button id="ShowTags">Теги</button></li>
+                }
+            </ul>
+        </div>
+        <div id="ContentWrapper" class="col-md-8"></div>
     </div>
-    <div id="ContentWrapper"></div>
 </body>
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $("#ShowResidentGeneralInformation").on("click", function () {
-            $("#ContentWrapper").load("@Url.Action("RenderResidentGeneralInformation")");
-        });
+        $("#Tabs li button").on("click",
+            function() {
+                $("#Tabs li").each(function(index, element) {
+                    $(element).removeClass("active");
+                });
 
-        $("#ShowResidentRequests").on("click", function() {
-            $("#ContentWrapper").load("@Url.Action("RenderResidentRequests")");
-        });
+                $(this).parent().addClass("active");
+            });
+
+        $("#ShowResidentGeneralInformation").on("click",
+            function() {
+                $("#ContentWrapper").load("@Url.Action("RenderGeneralInformation")");
+            });
+
+        $("#ShowResidentRequests").on("click",
+            function() {
+                $("#ContentWrapper").load("@Url.Action("RenderRequestsGrid")");
+            });
+
+        $("#ShowTags").on("click",
+            function() {
+                $("#ContentWrapper").load("@Url.Action("RenderTagsGrid")");
+            });
+
+        $("#ShowResidentGeneralInformation").click();
+
     });
+
 </script>
 

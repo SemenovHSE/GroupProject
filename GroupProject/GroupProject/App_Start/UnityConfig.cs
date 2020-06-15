@@ -5,6 +5,8 @@ using GroupProject.Database.Context;
 using GroupProject.Logging;
 using Unity.AspNet.Mvc;
 using System.Web;
+using GroupProject.Database.ModelsGenerated;
+
 namespace GroupProject
 {
     /// <summary>

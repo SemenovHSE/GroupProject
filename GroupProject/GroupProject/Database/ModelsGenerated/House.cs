@@ -12,7 +12,7 @@ namespace GroupProject.Database.ModelsGenerated
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public House()
         {
-            EmployeeHouses = new HashSet<EmployeeHouse>();
+            Employees = new HashSet<Employee>();
             Settings = new HashSet<Setting>();
         }
 
@@ -23,7 +23,7 @@ namespace GroupProject.Database.ModelsGenerated
         public string Address { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<EmployeeHouse> EmployeeHouses { get; set; }
+        public virtual ICollection<Employee> Employees { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Setting> Settings { get; set; }
