@@ -12,7 +12,6 @@ namespace GroupProject.Database.Context
     public interface IDatabaseContext
     {
         DbSet<Employee> Employees { get; set; }
-        DbSet<EmployeeHouse> EmployeeHouses { get; set; }
         DbSet<EmployeeInformationBlock> EmployeeInformationBlocks { get; set; }
         DbSet<House> Houses { get; set; }
         DbSet<InformationBlock> InformationBlocks { get; set; }

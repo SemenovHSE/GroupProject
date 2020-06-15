@@ -1,0 +1,125 @@
+﻿@using System.Web.UI.WebControls
+@using GroupProject.Database.ModelsExtensions
+@using GroupProject.Database.ModelsGenerated
+@using GroupProject.Enums
+@using GroupProject.Models
+@model RequestProgressModel
+
+@{
+    IPerson currentUser = ViewData["currentUser"] as IPerson;
+    int requestStatusId = Model.Request.Status.Id;
+}
+
+<div id="RequestProgressContent">
+    @if (currentUser is Employee && requestStatusId != (int)RequestStatus.Closed)
+    {
+        <button id="CloseRequest">Закрыть заявку</button>
+    }
+    <div id="RequestContent">
+        <div id="RequestStatus">
+            @Model.Request.Status.Name
+        </div>
+        <div id="Request">
+            @Model.Request.ResidentFullName
+            <br/>
+            @Model.Request.Date
+            <br/>
+            @Model.Request.Theme
+            <br/>
+            @Model.Request.Body
+            <br/>
+            @foreach (string fileName in Model.Request.Files)
+            {
+                string pathToFile = "\\Request_" + Model.Request.RequestId + "\\" + fileName;
+                @Html.ActionLink(fileName, "GetImage", new {filePath = pathToFile}, new {target = "_blank"})
+                <br/>
+            }
+        </div>
+        <div id="Replies">
+            @foreach (ReplyModel reply in Model.Replies)
+            {
+                <div>
+                    @reply.EmployeeFullName
+                    <br/>
+                    @reply.Date
+                    <br/>
+                    @reply.Body
+                    <br/>
+                    @foreach (string fileName in reply.Files)
+                    {
+                        string pathToFile = "\\Reply_" + reply.ReplyId + "\\" + fileName;
+                        @Html.ActionLink(fileName, "GetImage", new {filePath = pathToFile}, new {target = "_blank"})
+                        <br/>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+    @if (currentUser is Employee && requestStatusId != (int)RequestStatus.Closed)
+    {
+        <button id="AnswerInRequest">Ответить на заявку</button>
+    }
+    <button id="BackToRequests">Назад к запросам</button>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#CloseRequest").on("click",
+            function() {
+                $.ajax({
+                    url: "@Url.Action("CloseRequest")",
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        requestId: @Model.Request.RequestId
+                    },
+                    success: function(data) {
+                        if (data.result) {
+                            alert("Заявка была успешно закрыта!");
+                            $.ajax({
+                                url: "@Url.Action("GetRequestProgress")",
+                                type: "GET",
+                                data: {
+                                    requestId: @Model.Request.RequestId
+                                },
+                                success: function(data) {
+                                    if (data) {
+                                        $("#RequestProgressContent").replaceWith(data);
+                                    }
+                                    else {
+                                        alert("Произошла ошибка при обновлении информации о заявке");
+                                    }
+                                }
+                            });
+                        }
+                        else {
+                            alert("Во время закрытия заявки произошла ошибка");
+                        }
+                    }
+                });
+            });
+
+        $("#AnswerInRequest").on("click",
+            function() {
+                $.ajax({
+                    url: "@Url.Action("RenderSendReply")",
+                    type: "GET",
+                    data: {
+                        requestId: @Model.Request.RequestId
+                    },
+                    success: function(data) {
+                        $("#AnswerInRequest").replaceWith(data);
+                    }
+                });
+            });
+
+        $("#BackToRequests").on("click",
+            function () {
+                $("#ContentWrapper #RequestProgressContent").remove();
+                $("#ResidentRequestsContent").show();
+            });
+    });
+    
+
+   
+</script>

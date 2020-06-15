@@ -1,0 +1,42 @@
+﻿@using GroupProject.Models
+@model UserModel
+
+<div id="ResidentInformation">
+    @Html.LabelFor(g => g.FullName)
+    <br />
+    @Html.TextBoxFor(g => g.FullName)
+    @Html.ValidationMessageFor(g => g.FullName)
+    <br />
+    @Html.LabelFor(g => g.PhoneNumber)
+    <br />
+    @Html.TextBoxFor(g => g.PhoneNumber)
+    @Html.ValidationMessageFor(g => g.PhoneNumber)
+    <button id="UpdateGeneralInformation">Редактировать</button>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#UpdateGeneralInformation").on("click",
+            function() {
+                var dataToUpdate = {
+                    FullName: $("#Resident_FullName").val(),
+                    PhoneNumber: $("#Resident_PhoneNumber").val()
+                };
+                $.ajax({
+                    url: "@Url.Action("UpdateGeneralInformation")",
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        residentModel: dataToUpdate
+                    },
+                    success: function(data) {
+                        if (data.result) {
+                            alert("Личные данные обновлены!")
+                        } else {
+                            alert("Во время обновления личных данных произошла ошибка");
+                        }
+                    }
+                });
+            });
+    });
+</script>

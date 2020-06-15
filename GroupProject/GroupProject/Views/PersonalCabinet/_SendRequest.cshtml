@@ -1,0 +1,50 @@
+﻿@using GroupProject.Models
+@model SendRequestModel
+
+<div>
+    @Html.LabelFor(r => r.Theme)
+    <br/>
+    @Html.TextBoxFor(r => r.Theme)
+    <br/>
+    @Html.LabelFor(r => r.Body)
+    <br/>
+    @Html.TextAreaFor(r => r.Body)
+    <br/>
+    @Html.LabelFor(r => r.Files)
+    <br />
+    <input type="file" id="Files" multiple/>
+    <br />
+    <button id="SendRequest">Подать заявку</button>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#SendRequest").on("click",
+            function() {
+                var formData = new FormData();
+                formData.append("Theme", $("#Theme").val());
+                formData.append("Body", $("#Body").val());
+                var files = $("#Files").prop("files");
+                for (let i = 0; i < files.length; i++) {
+                    formData.append("Files[" + i + "]", files[i]);
+                }
+                $.ajax({
+                    url: "@Url.Action("SendRequest")",
+                    type: "POST",
+                    dataType: "json",
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    success: function(data) {
+                        if (data.result) {
+                            alert("Спасибо! Ваша заявка будет рассмотрена в ближайшее время!");
+                            $("#ShowResidentRequests").click();
+                        }
+                        else {
+                            alert("Произошла ошибка при отправке запроса");
+                        }
+                    }
+                });
+            });
+    });
+</script>
