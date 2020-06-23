@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using System.IO;
 using System.Web.Optimization;
 using System.Web.UI.WebControls.WebParts;
+using GroupProject.Authentication;
 using GroupProject.Classes;
 using GroupProject.Enums;
 using GroupProject.Extensions;
@@ -19,7 +20,8 @@ namespace GroupProject.Controllers
 {
     public class PersonalCabinetController : BaseController
     {
-        // GET: PersonalCabinet
+        [AllowAccess(new [] { AuthenticationTypeEnum.Resident, AuthenticationTypeEnum.Employee })]
+        [HttpGet]
         public ActionResult Index()
         {
             ViewData["currentUser"] = CurrentUser;
@@ -28,6 +30,7 @@ namespace GroupProject.Controllers
         }
 
 
+        [AllowAccess(new [] { AuthenticationTypeEnum.Resident, AuthenticationTypeEnum.Employee })]
         [HttpGet]
         public ActionResult RenderGeneralInformation()
         {
@@ -77,6 +80,7 @@ namespace GroupProject.Controllers
         }
 
 
+        [AllowAccess(new[] { AuthenticationTypeEnum.Resident, AuthenticationTypeEnum.Employee })]
         [HttpPost]
         public JsonResult UpdateGeneralInformation(UserModel userModel)
         {
@@ -110,6 +114,7 @@ namespace GroupProject.Controllers
         }
 
 
+        [AllowAccess(new [] { AuthenticationTypeEnum.Resident })]
         [HttpPost]
         public JsonResult UpdateSettingInformation(SettingModel settingModel)
         {
@@ -133,6 +138,7 @@ namespace GroupProject.Controllers
         }
 
 
+        [AllowAccess(new [] { AuthenticationTypeEnum.Resident, AuthenticationTypeEnum.Employee })]
         [HttpGet]
         public ActionResult RenderRequests()
         {
@@ -149,6 +155,7 @@ namespace GroupProject.Controllers
         }
 
 
+        [AllowAccess(new [] { AuthenticationTypeEnum.Resident, AuthenticationTypeEnum.Employee })]
         [HttpGet]
         public ActionResult RenderRequestsGrid(RequestsPageFilterModel filterModel)
         {
@@ -218,21 +225,7 @@ namespace GroupProject.Controllers
         }
 
 
-        [HttpGet]
-        public ActionResult RenderSendRequest()
-        {
-            try
-            {
-                return PartialView("_SendRequest");
-            }
-            catch (Exception e)
-            {
-                Logger.Error(e.Message);
-                return new HttpNotFoundResult();
-            }
-        }
-
-
+        [AllowAccess(new[] { AuthenticationTypeEnum.Resident })]
         [HttpGet]
         public ActionResult RenderTagsGrid(int page = 1)
         {
@@ -272,6 +265,24 @@ namespace GroupProject.Controllers
             }
         }
 
+
+        [AllowAccess(new [] { AuthenticationTypeEnum.Resident })]
+        [HttpGet]
+        public ActionResult RenderSendRequest()
+        {
+            try
+            {
+                return PartialView("_SendRequest");
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e.Message);
+                return new HttpNotFoundResult();
+            }
+        }
+
+
+        [AllowAccess(new[] { AuthenticationTypeEnum.Resident })]
         [HttpPost]
         public JsonResult SendRequest(SendRequestModel model)
         {
@@ -315,6 +326,7 @@ namespace GroupProject.Controllers
         }
 
 
+        [AllowAccess(new[] { AuthenticationTypeEnum.Employee })]
         [HttpGet]
         public ActionResult RenderSendReply(int requestId)
         {
@@ -339,6 +351,7 @@ namespace GroupProject.Controllers
         }
 
 
+        [AllowAccess(new [] { AuthenticationTypeEnum.Employee })]
         [HttpPost]
         public JsonResult SendReply(SendReplyModel model)
         {
@@ -398,6 +411,7 @@ namespace GroupProject.Controllers
         }
 
 
+        [AllowAccess(new [] { AuthenticationTypeEnum.Employee })]
         [HttpPost]
         public JsonResult CloseRequest(int requestId)
         {
@@ -438,6 +452,7 @@ namespace GroupProject.Controllers
         }
 
 
+        [AllowAccess(new [] { AuthenticationTypeEnum.Resident, AuthenticationTypeEnum.Employee })]
         [HttpGet]
         public ActionResult GetRequestProgress(int requestId)
         {
@@ -491,6 +506,7 @@ namespace GroupProject.Controllers
         }
 
 
+        [AllowAccess(new[] { AuthenticationTypeEnum.Resident, AuthenticationTypeEnum.Employee })]
         [HttpGet]
         public ImageResult GetImage(string filePath)
         {
@@ -507,6 +523,7 @@ namespace GroupProject.Controllers
         }
 
 
+        [AllowAccess(new [] { AuthenticationTypeEnum.Resident })]
         [HttpPost]
         public JsonResult SubscribeToTag(int tagId)
         {
@@ -535,6 +552,7 @@ namespace GroupProject.Controllers
         }
 
 
+        [AllowAccess(new [] { AuthenticationTypeEnum.Resident })]
         [HttpPost]
         public JsonResult UnsubscribeFromTag(int tagId)
         {

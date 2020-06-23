@@ -14,13 +14,7 @@ namespace GroupProject.Controllers
 {
     public class MenuController : BaseController
     {
-        // GET: Menu
-        public ActionResult Index()
-        {
-            return RedirectToAction("About");
-        }
-
-
+        [AllowAccess(new [] {AuthenticationTypeEnum.Anonymous, AuthenticationTypeEnum.Resident, AuthenticationTypeEnum.Employee })]
         [HttpGet]
         public ActionResult About()
         {
@@ -30,6 +24,7 @@ namespace GroupProject.Controllers
         }
 
         
+        [AllowAccess(new [] { AuthenticationTypeEnum.Anonymous, AuthenticationTypeEnum.Resident, AuthenticationTypeEnum.Employee })]
         [HttpGet]
         public ActionResult InformationBlocks()
         {
@@ -39,6 +34,7 @@ namespace GroupProject.Controllers
         }
 
 
+        [AllowAccess(new [] {AuthenticationTypeEnum.Anonymous, AuthenticationTypeEnum.Resident, AuthenticationTypeEnum.Employee })]
         [HttpGet]
         public ActionResult PersonalCabinet()
         {
@@ -50,6 +46,7 @@ namespace GroupProject.Controllers
         }
 
 
+        [AllowAccess(new[] {AuthenticationTypeEnum.Resident, AuthenticationTypeEnum.Employee })]
         [HttpGet]
         public ActionResult FinancialStatements()
         {
@@ -59,6 +56,7 @@ namespace GroupProject.Controllers
         }
 
 
+        [AllowAccess(new[] {AuthenticationTypeEnum.Resident, AuthenticationTypeEnum.Employee })]
         [HttpGet]
         public ActionResult Deptors()
         {
@@ -68,6 +66,7 @@ namespace GroupProject.Controllers
         }
 
 
+        [AllowAccess(new [] {AuthenticationTypeEnum.Anonymous, AuthenticationTypeEnum.Resident, AuthenticationTypeEnum.Employee })]
         [HttpGet]
         public ActionResult Contacts()
         {
@@ -77,6 +76,7 @@ namespace GroupProject.Controllers
         }
 
 
+        [AllowAccess(new [] {AuthenticationTypeEnum.Employee })]
         [HttpGet]
         public ActionResult Tags()
         {
@@ -86,6 +86,7 @@ namespace GroupProject.Controllers
         }
 
 
+        [AllowAccess(new [] {AuthenticationTypeEnum.Anonymous })]
         [HttpGet]
         public ActionResult Register()
         {
@@ -97,6 +98,7 @@ namespace GroupProject.Controllers
         }
 
 
+        [AllowAccess(new [] {AuthenticationTypeEnum.Anonymous })]
         [HttpPost]
         public ActionResult Register(RegistrationModel registrationModel)
         {
@@ -125,17 +127,9 @@ namespace GroupProject.Controllers
                 return RedirectToAction("Register");
             }
         }
+        
 
-
-        [HttpGet]
-        public ActionResult Login()
-        {
-            ViewData["currentUser"] = CurrentUser;
-            ViewData["currentLink"] = "PersonalCabinet";
-            return View(new LoginModel());
-        }
-
-
+        [AllowAccess(new [] { AuthenticationTypeEnum.Anonymous, AuthenticationTypeEnum.Resident, AuthenticationTypeEnum.Employee })]
         [HttpGet]
         public ActionResult LoginInformation()
         {
@@ -143,6 +137,7 @@ namespace GroupProject.Controllers
         }
 
 
+        [AllowAccess(new [] { AuthenticationTypeEnum.Anonymous, AuthenticationTypeEnum.Resident, AuthenticationTypeEnum.Employee })]
         [HttpGet]
         public ActionResult HouseInformation()
         {
@@ -160,6 +155,17 @@ namespace GroupProject.Controllers
         }
 
 
+        [AllowAccess(new [] { AuthenticationTypeEnum.Anonymous })]
+        [HttpGet]
+        public ActionResult Login()
+        {
+            ViewData["currentUser"] = CurrentUser;
+            ViewData["currentLink"] = "PersonalCabinet";
+            return View(new LoginModel());
+        }
+
+
+        [AllowAccess(new [] { AuthenticationTypeEnum.Anonymous })]
         [HttpPost]
         public ActionResult Login(LoginModel login)
         {
@@ -178,6 +184,7 @@ namespace GroupProject.Controllers
         }
 
 
+        [AllowAccess(new [] { AuthenticationTypeEnum.Resident, AuthenticationTypeEnum.Employee })]
         [HttpGet]
         public ActionResult Logout()
         {
@@ -186,13 +193,7 @@ namespace GroupProject.Controllers
         }
 
 
-        [AllowAccess(new[] { AuthenticationTypeEnum.Employee })]
-        public ContentResult Test()
-        {
-            return Content("ПРИВЕТ!");
-        }
-
-
+        [AllowAccess(new [] { AuthenticationTypeEnum.Employee })]
         [HttpGet]
         public ActionResult RenderTagsGrid(int page = 1)
         {
@@ -230,6 +231,7 @@ namespace GroupProject.Controllers
         }
 
 
+        [AllowAccess(new [] { AuthenticationTypeEnum.Employee })]
         [HttpPost]
         public JsonResult UpdateTag(MenuTagModel tagModel)
         {
@@ -251,6 +253,8 @@ namespace GroupProject.Controllers
             }
         }
 
+        
+        [AllowAccess(new [] { AuthenticationTypeEnum.Employee })]
         [HttpGet]
         public ActionResult RenderCreateTag()
         {
@@ -265,6 +269,8 @@ namespace GroupProject.Controllers
             }
         }
 
+
+        [AllowAccess(new [] { AuthenticationTypeEnum.Employee })]
         [HttpPost]
         public JsonResult CreateTag(CreateTagModel tagModel)
         {
@@ -286,6 +292,7 @@ namespace GroupProject.Controllers
         }
 
 
+        [AllowAccess(new[] { AuthenticationTypeEnum.Employee })]
         [HttpGet]
         public ActionResult RenderInformationBlocksGrid(int page = 1)
         {
@@ -338,6 +345,7 @@ namespace GroupProject.Controllers
         }
 
 
+        [AllowAccess(new [] { AuthenticationTypeEnum.Resident, AuthenticationTypeEnum.Employee })]
         [HttpGet]
         public ImageResult GetImage(string filePath)
         {
@@ -354,6 +362,7 @@ namespace GroupProject.Controllers
         }
 
 
+        [AllowAccess(new [] { AuthenticationTypeEnum.Employee })]
         [HttpGet]
         public ActionResult RenderInformationBlock(int? informationBlockId = null)
         {
@@ -412,6 +421,7 @@ namespace GroupProject.Controllers
         }
 
 
+        [AllowAccess(new [] { AuthenticationTypeEnum.Employee })]
         [HttpPost]
         public JsonResult CreateInformationBlock(CreateEditInformationBlockModel model)
         {
@@ -467,6 +477,7 @@ namespace GroupProject.Controllers
         }
 
 
+        [AllowAccess(new [] { AuthenticationTypeEnum.Employee })]
         [HttpPost]
         public JsonResult EditInformationBlock(CreateEditInformationBlockModel model)
         {
@@ -528,6 +539,7 @@ namespace GroupProject.Controllers
         }
 
 
+        [AllowAccess(new[] { AuthenticationTypeEnum.Employee })]
         [HttpPost]
         public JsonResult RemoveInformationBlock(int informationBlockId)
         {
@@ -551,6 +563,7 @@ namespace GroupProject.Controllers
         }
 
 
+        [AllowAccess(new [] { AuthenticationTypeEnum.Anonymous, AuthenticationTypeEnum.Resident })]
         [HttpGet]
         public ActionResult RenderInformationBlocks()
         {
@@ -567,6 +580,7 @@ namespace GroupProject.Controllers
         }
 
 
+        [AllowAccess(new [] { AuthenticationTypeEnum.Anonymous, AuthenticationTypeEnum.Resident })]
         [HttpGet]
         public ActionResult RenderInformationBlocksPage(InformationBlockPageFilterModel filterModel)
         {
@@ -576,23 +590,26 @@ namespace GroupProject.Controllers
                 IEnumerable<InformationBlock> informationBlocks =
                     DatabaseContext.InformationBlocks.OrderByDescending(b => b.Date).ToList();
 
-                Resident resident = CurrentUser as Resident;
-
-                informationBlocks = informationBlocks.Where(b => b.Employee.HouseId == resident.Setting.HouseId);
-
-                if (filterModel.UserTags)
+                if (CurrentUser is Resident)
                 {
-                    informationBlocks = informationBlocks.Where(b =>
+                    Resident resident = CurrentUser as Resident;
+
+                    informationBlocks = informationBlocks.Where(b => b.Employee.HouseId == resident.Setting.HouseId);
+
+                    if (filterModel.UserTags)
                     {
-                        var informationBlockTags = b.TagInformationBlocks.Where(t => t.InformationBlockId == b.Id)
-                            .Select(t => t.TagId);
-                        var residentTags = resident.ResidentTags.Where(r => r.ResidentId == resident.Id)
-                            .Select(t => t.TagId);
-                        var showInformationBlock = informationBlockTags.Any(t => residentTags.Contains(t));
-                        return showInformationBlock;
-                    });
+                        informationBlocks = informationBlocks.Where(b =>
+                        {
+                            var informationBlockTags = b.TagInformationBlocks.Where(t => t.InformationBlockId == b.Id)
+                                .Select(t => t.TagId);
+                            var residentTags = resident.ResidentTags.Where(r => r.ResidentId == resident.Id)
+                                .Select(t => t.TagId);
+                            var showInformationBlock = informationBlockTags.Any(t => residentTags.Contains(t));
+                            return showInformationBlock;
+                        });
+                    }
                 }
-                
+
                 IEnumerable<ViewInformationBlockModel> informationBlocksModels = informationBlocks
                     .Skip((filterModel.Page - 1) * pageSize).Take(pageSize).ToList().Select(
                     b =>
