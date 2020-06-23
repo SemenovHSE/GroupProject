@@ -1,0 +1,131 @@
+﻿@using GroupProject.Models
+@model InformationBlockModel
+
+<div id="InformationBlock">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            @Html.HiddenFor(b => b.Id)
+            @if (Model.Date != null)
+            {
+                <div class="form-group">
+                    @Html.LabelFor(b => b.Date, new { @class = "control-label" })
+                    @Html.ValueFor(b => b.Date)
+                </div>
+            }
+            <div class="form-group">
+                @Html.LabelFor(b => b.Title, new { @class = "control-label" })
+                @Html.TextBoxFor(b => b.Title, new { @class = "form-control" })
+                @Html.ValidationMessageFor(b => b.Title)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(b => b.Body, new { @class = "control-label" })
+                @Html.TextAreaFor(b => b.Body, new { @class = "form-control", rows = "5" })
+                @Html.ValidationMessageFor(b => b.Body)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(b => b.Files, new { @class = "control-label" })
+                <input type="file" id="Files" class="form-control" multiple />
+                @Html.ValidationMessageFor(b => b.Files)
+            </div>
+            <div class="form-group">
+                @foreach (string fileName in Model.Files)
+                {
+                    string pathToFile = "\\InformationBlock_" + Model.Id + "\\" + fileName;
+                    @Html.ActionLink(fileName, "GetImage", new { filePath = pathToFile }, new { target = "_blank" })
+                    <br />
+                }
+            </div>
+            <div class="form-group">
+                @Html.ListBoxFor(b => b.TagsIds, Model.Tags, new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        @if (Model.Id == null)
+        {
+            <button id="CreateInformationBlock" class="btn btn-primary btn-lg center-block">Добавить новость</button>
+        }
+        else
+        {
+            <button id="EditInformationBlock" class="btn btn-primary btn-lg center-block">Изменить новость</button>
+        }
+    </div>
+    <br/>
+    <div class="row">
+        <button id="BackToInformationBlocks" class="btn btn-info btn-sm center-block">Отмена</button>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#CreateInformationBlock").on("click",
+            function() {
+                debugger;
+                var formData = new FormData();
+                formData.append("Title", $("#Title").val());
+                formData.append("Body", $("#Body").val());
+                var files = $("#Files").prop("files");
+                for (let i = 0; i < files.length; i++) {
+                    formData.append("Files[" + i + "]", files[i]);
+                }
+                var tags = $("#TagsIds").val();
+                for (let i = 0; i < tags.length; i++) {
+                    formData.append("TagsIds[" + i + "]", tags[i]);
+                }
+                $.ajax({
+                    url: "@Url.Action("CreateInformationBlock")",
+                    type: "POST",
+                    dataType: "json",
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    success: function(data) {
+                        if (data.result) {
+                            alert("Новость успешно добавлена!");
+                            location.reload();
+                        } else {
+                            alert("Во время добавления новости произошла ошибка");
+                        }
+                    }
+                });
+            });
+
+        $("#EditInformationBlock").on("click",
+            function() {
+                var formData = new FormData();
+                formData.append("Id", $("#Id").val());
+                formData.append("Title", $("#Title").val());
+                formData.append("Body", $("#Body").val());
+                var files = $("#Files").prop("files");
+                for (let i = 0; i < files.length; i++) {
+                    formData.append("Files[" + i + "]", files[i]);
+                }
+                var tags = $("#TagsIds").val();
+                for (let i = 0; i < tags.length; i++) {
+                    formData.append("TagsIds[" + i + "]", tags[i]);
+                }
+                $.ajax({
+                    url: "@Url.Action("EditInformationBlock")",
+                    type: "POST",
+                    dataType: "json",
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    success: function(data) {
+                        if (data.result) {
+                            alert("Новость успешно обновлена!");
+                        }
+                        else {
+                            alert("Во время обновления новости произошла ошибка");
+                        }
+                    }
+                });
+            });
+
+        $("#BackToInformationBlocks").on("click",
+            function() {
+                $("#ContentWrapper #InformationBlock").remove();
+                $("#InformationBlocksContent").show();
+            });
+    });
+</script>

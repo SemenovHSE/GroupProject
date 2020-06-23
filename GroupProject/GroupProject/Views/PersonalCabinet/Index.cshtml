@@ -6,33 +6,32 @@
     IPerson currentUser = ViewData["currentUser"] as IPerson;
 }
 
-<h2>Личный кабинет</h2>
-
+<h1>Личный кабинет</h1>
 <body>
-    <div class="row">
+    <div>
         <div id="Tabs" class="col-md-2">
-            <ul>
-                <li class="active"><button id="ShowResidentGeneralInformation">Общая информация</button></li>
-                <li><button id="ShowResidentRequests">Заявки</button></li>
+            <div class="list-group">
+                <button id="ShowResidentGeneralInformation" class="list-group-item active">Общая информация</button>
+                <button id="ShowResidentRequests" class="list-group-item">Заявки</button>
                 @if (currentUser is Resident)
                 {
-                    <li><button id="ShowTags">Теги</button></li>
+                    <button id="ShowTags" class="list-group-item">Теги</button>
                 }
-            </ul>
+            </div>
         </div>
-        <div id="ContentWrapper" class="col-md-8"></div>
+        <div id="ContentWrapper" class="col-md-10"></div>
     </div>
 </body>
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $("#Tabs li button").on("click",
+        $("#Tabs button").on("click",
             function() {
-                $("#Tabs li").each(function(index, element) {
+                $("#Tabs button").each(function(index, element) {
                     $(element).removeClass("active");
                 });
 
-                $(this).parent().addClass("active");
+                $(this).addClass("active");
             });
 
         $("#ShowResidentGeneralInformation").on("click",
@@ -42,7 +41,7 @@
 
         $("#ShowResidentRequests").on("click",
             function() {
-                $("#ContentWrapper").load("@Url.Action("RenderRequestsGrid")");
+                $("#ContentWrapper").load("@Url.Action("RenderRequests")");
             });
 
         $("#ShowTags").on("click",

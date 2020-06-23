@@ -1,36 +1,48 @@
 ﻿@using GroupProject.Models
 @model ResidentGeneralInformationModel
 
-<div id="GeneralInformation">
+@{
+    List<string> addresses = (ViewData["addresses"] as List<string>) ?? new List<string>();
+    IEnumerable<SelectListItem> addressesItems = addresses.Select(a => new SelectListItem()
+    {
+        Text = a,
+        Value = a
+    });
+}
+
+<div id="GeneralInformation" col->
     @{Html.RenderPartial("_UserInformation", Model.User);}
     @if (Model.Setting != null)
     {
-        <div id="SettingInformation">
-            @Html.LabelFor(g => g.Setting.Address)
-            <br />
-            @Html.TextBoxFor(g => g.Setting.Address)
-            @Html.ValidationMessageFor(g => g.Setting.Address)
-            <br />
-            @Html.LabelFor(g => g.Setting.SettingNumber)
-            <br />
-            @Html.TextBoxFor(g => g.Setting.SettingNumber)
-            @Html.ValidationMessageFor(g => g.Setting.SettingNumber)
-            <br />
-            @Html.LabelFor(g => g.Setting.Entrance)
-            <br />
-            @Html.TextBoxFor(g => g.Setting.Entrance)
-            @Html.ValidationMessageFor(g => g.Setting.Entrance)
-            <br />
-            @Html.LabelFor(g => g.Setting.Size)
-            <br />
-            @Html.TextBoxFor(g => g.Setting.Size)
-            @Html.ValidationMessageFor(g => g.Setting.Size)
-            <br />
-            @Html.LabelFor(g => g.Setting.RoomsNumber)
-            <br />
-            @Html.TextBoxFor(g => g.Setting.RoomsNumber)
-            @Html.ValidationMessageFor(g => g.Setting.RoomsNumber)
-            <button id="UpdateSettingInformation">Редактировать</button>
+        <div class="row">
+            <div id="SettingInformation" class="form-group col-md-4 col-md-offset-2">
+                <div class="form-group">
+                    @Html.LabelFor(g => g.Setting.Address)
+                    @Html.DropDownListFor(g => g.Setting.Address, addressesItems, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(g => g.Setting.Address)
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(g => g.Setting.SettingNumber)
+                    @Html.TextBoxFor(g => g.Setting.SettingNumber, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(g => g.Setting.SettingNumber)
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(g => g.Setting.Entrance)
+                    @Html.TextBoxFor(g => g.Setting.Entrance, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(g => g.Setting.Entrance)
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(g => g.Setting.Size)
+                    @Html.TextBoxFor(g => g.Setting.Size, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(g => g.Setting.Size)
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(g => g.Setting.RoomsNumber)
+                    @Html.TextBoxFor(g => g.Setting.RoomsNumber, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(g => g.Setting.RoomsNumber)
+                </div>
+                <button id="UpdateSettingInformation" class="btn btn-primary center-block">Редактировать</button>
+            </div>
         </div>
     }
 </div>

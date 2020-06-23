@@ -1,0 +1,115 @@
+﻿@using System.ServiceModel.Security
+@using GroupProject.Database.ModelsExtensions
+@using GroupProject.Database.ModelsGenerated
+@using GroupProject.Enums
+@using GroupProject.Helpers
+@using GroupProject.Models
+
+@{
+    IPerson currentUser = ViewData["currentUser"] as IPerson;
+    List<SelectListItem> statuses = new List<SelectListItem>();
+    foreach (RequestStatus status in Enum.GetValues(typeof(RequestStatus)))
+    {
+        statuses.Add(new SelectListItem()
+        {
+            Text = RequestStatusHelper.GetName(status),
+            Value = ((int)status).ToString()
+        });
+    }
+}
+
+<div id="ResidentRequestsContent">
+    <div class="row">
+        <div id="FilterPanel" class="form-group col-md-4">
+            @if (currentUser is Resident)
+            {
+                <div class="form-group">
+                    <div class="radio">
+                        <label class="radio-inline">
+                            @Html.RadioButton("FilterByUser", true, true) Только мои заявки
+                        </label>
+                        <label class="radio-inline">
+                            @Html.RadioButton("FilterByUser", false, false) Все заявки по дому
+                        </label>
+                    </div>
+                </div>
+            }
+            <div class="form-group">
+                <label for="FilterByStatus">Статус</label>
+                @Html.DropDownList("FilterByStatus", statuses, "Выберите статус", new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                <label for="FilterByTheme">Тема</label>
+                @Html.TextBox("FilterByTheme", "", new { @class = "form-control" })
+            </div>
+            <button id="Filter" class="btn btn-default center-block">Отфильтровать</button>
+        </div>
+    </div>
+    <div class="row">
+        <div id="RequestsGridWrapper"></div>
+        @if (currentUser is Resident)
+        {
+            <button id="ShowSendRequest" class="btn btn-primary btn-lg center-block">Подать заявку</button>
+        }
+    </div>
+</div>
+
+<script type="text/javascript">
+    var filterPanelData = {
+        UserRequests: true,
+        StatusId: @((int)RequestStatus.All),
+        Theme: null,
+        Page: 1
+    };
+
+    $(document).ready(function() {
+        $.ajax({
+            url: "@Url.Action("RenderRequestsGrid")",
+            type: "GET",
+            data: filterPanelData,
+            success: function(data) {
+                $("#RequestsGridWrapper").replaceWith(data);
+            }
+        });
+
+        $("#ShowSendRequest").on("click",
+            function() {
+                $("#ContentWrapper").load("@Url.Action("RenderSendRequest")");
+            });
+
+        $("#Filter").on("click",
+            function() {
+                var filterData = {
+                    UserRequests: $("#FilterByUser:checked").val() === "True",
+                    StatusId: $("#FilterByStatus").val(),
+                    Theme: $("#FilterByTheme").val(),
+                    Page: 1
+                };
+                $.ajax({
+                    url: "@Url.Action("RenderRequestsGrid")",
+                    type: "GET",
+                    data: filterData,
+                    success: function(data) {
+                        $("#RequestsGridWrapper").replaceWith(data);
+                        filterPanelData = filterData;
+                    }
+                });
+            });
+    });
+
+    function getStatusColour(statusName) {
+        var colour = "";
+        switch (statusName) {
+        case "Waiting":
+            colour = "request-status-waiting";
+            break;
+        case "UnderConsideration":
+            colour = "request-status-under-consideration";
+            break;
+        case "Closed":
+            colour = "request-status-closed";
+            break;
+        }
+        return colour;
+    }
+</script>

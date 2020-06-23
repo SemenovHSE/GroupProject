@@ -4,7 +4,7 @@
 
 <div id="TagsContent">
     <div id="TagsGridWrapper">
-        <table id="Tags" class="table">
+        <table id="Tags" class="table table-hover">
             <thead>
             <tr>
                 <th>
@@ -13,9 +13,7 @@
                 <th>
                     @Html.DisplayNameFor(t => t.Tags.FirstOrDefault().Name)
                 </th>
-                <th>
-                    Действие
-                </th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
@@ -31,11 +29,11 @@
                     <td>
                         @if (tag.ResidentIsSubscribed)
                         {
-                            <button class="unsubscribe" tagId="@tag.TagId">Отписаться</button>
+                            <button class="unsubscribe btn" tagId="@tag.TagId">Отписаться</button>
                         }
                         else
                         {
-                            <button class="subscribe" tagId="@tag.TagId">Подписаться</button>
+                            <button class="subscribe btn" tagId="@tag.TagId">Подписаться</button>
                         }
                     </td>
                 </tr>

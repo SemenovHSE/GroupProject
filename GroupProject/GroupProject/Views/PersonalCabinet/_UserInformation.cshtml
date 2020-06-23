@@ -1,17 +1,23 @@
 ﻿@using GroupProject.Models
 @model UserModel
 
-<div id="ResidentInformation">
-    @Html.LabelFor(g => g.FullName)
-    <br />
-    @Html.TextBoxFor(g => g.FullName)
-    @Html.ValidationMessageFor(g => g.FullName)
-    <br />
-    @Html.LabelFor(g => g.PhoneNumber)
-    <br />
-    @Html.TextBoxFor(g => g.PhoneNumber)
-    @Html.ValidationMessageFor(g => g.PhoneNumber)
-    <button id="UpdateGeneralInformation">Редактировать</button>
+<div id="UserInformation">
+    <div class="row">
+        <div class="form-group col-md-4 col-md-offset-2">
+            <div class="form-group">
+                @Html.LabelFor(g => g.FullName)
+                @Html.TextBoxFor(g => g.FullName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(g => g.FullName)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(g => g.PhoneNumber)
+                @Html.TextBoxFor(g => g.PhoneNumber, new { @class = "form-control" })
+                @Html.ValidationMessageFor(g => g.PhoneNumber)
+            </div>
+            <button id="UpdateGeneralInformation" class="btn btn-primary center-block">Редактировать</button>
+        </div>
+    </div>
+    
 </div>
 
 <script type="text/javascript">
@@ -19,15 +25,15 @@
         $("#UpdateGeneralInformation").on("click",
             function() {
                 var dataToUpdate = {
-                    FullName: $("#Resident_FullName").val(),
-                    PhoneNumber: $("#Resident_PhoneNumber").val()
+                    FullName: $("#FullName").val(),
+                    PhoneNumber: $("#PhoneNumber").val()
                 };
                 $.ajax({
                     url: "@Url.Action("UpdateGeneralInformation")",
                     type: "POST",
                     dataType: "json",
                     data: {
-                        residentModel: dataToUpdate
+                        userModel: dataToUpdate
                     },
                     success: function(data) {
                         if (data.result) {

@@ -22,5 +22,10 @@ namespace GroupProject.Models
 
         [Display(Name = "ФИО сотрудника")]
         public string EmployeeFullName { get; set; }
+
+        public ReplyModel()
+        {
+            Files = new List<string>();
+        }
     }
 }

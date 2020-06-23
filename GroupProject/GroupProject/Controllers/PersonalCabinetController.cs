@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Drawing;
 using System.Linq;
 using System.Web;
@@ -22,6 +23,7 @@ namespace GroupProject.Controllers
         public ActionResult Index()
         {
             ViewData["currentUser"] = CurrentUser;
+            ViewData["currentLink"] = "PersonalCabinet";
             return View();
         }
 
@@ -52,6 +54,8 @@ namespace GroupProject.Controllers
                         RoomsNumber = setting.RoomsNumber
                     };
                     model.Setting = settingModel;
+                    List<string> addresses = DatabaseContext.Houses.Select(h => h.Address).ToList();
+                    ViewData["addresses"] = addresses;
                     return PartialView("_ResidentGeneralInformation", model);
                 }
                 if (CurrentUser is Employee)
@@ -74,16 +78,29 @@ namespace GroupProject.Controllers
 
 
         [HttpPost]
-        public JsonResult UpdateGeneralInformation(UserModel residentModel)
+        public JsonResult UpdateGeneralInformation(UserModel userModel)
         {
             try
             {
-                Resident resident = CurrentUser as Resident;
-                resident = DatabaseContext.Residents.FirstOrDefault(r => r.Id == resident.Id);
-                resident.FullName = residentModel.FullName;
-                resident.PhoneNumber = residentModel.PhoneNumber;
-                DatabaseContext.SaveChanges();
-                return Json(new {result = true});
+                if (CurrentUser is Resident)
+                {
+                    Resident resident = CurrentUser as Resident;
+                    resident = DatabaseContext.Residents.FirstOrDefault(r => r.Id == resident.Id);
+                    resident.FullName = userModel.FullName;
+                    resident.PhoneNumber = userModel.PhoneNumber;
+                    DatabaseContext.SaveChanges();
+                    return Json(new {result = true});
+                }
+                if (CurrentUser is Employee)
+                {
+                    Employee employee = CurrentUser as Employee;
+                    employee = DatabaseContext.Employees.FirstOrDefault(r => r.Id == employee.Id);
+                    employee.FullName = userModel.FullName;
+                    employee.PhoneNumber = userModel.PhoneNumber;
+                    DatabaseContext.SaveChanges();
+                    return Json(new {result = true});
+                }
+                throw new Exception("Тип пользователя не определён");
             }
             catch (Exception e)
             {
@@ -117,24 +134,72 @@ namespace GroupProject.Controllers
 
 
         [HttpGet]
-        public ActionResult RenderRequestsGrid(int page = 1)
+        public ActionResult RenderRequests()
+        {
+            try
+            {
+                ViewData["currentUser"] = CurrentUser;
+                return PartialView("_Requests");
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e.Message);
+                return new HttpNotFoundResult();
+            }
+        }
+
+
+        [HttpGet]
+        public ActionResult RenderRequestsGrid(RequestsPageFilterModel filterModel)
         {
             try
             {
                 int pageSize = 5;
-                IQueryable<Request> requests = DatabaseContext.Requests.OrderByDescending(r => r.Date);
-                IEnumerable<RequestModel> requestsModels = requests.Skip((page - 1) * pageSize).Take(pageSize).ToList()
-                    .Select(r =>
+                IEnumerable<Request> requests = DatabaseContext.Requests.OrderByDescending(r => r.Date).ToList();
+                
+                if (CurrentUser is Resident)
+                {
+                    if (filterModel.UserRequests)
+                    {
+                        requests = requests.Where(r => r.ResidentId == CurrentUser.Id);
+                    }
+                    else
+                    {
+                        requests = requests.Where(r => r.Resident.Setting.HouseId.Value == (CurrentUser as Resident).Setting.HouseId.Value);
+                    }
+                }
+
+                if (CurrentUser is Employee)
+                {
+                    requests = requests.Where(r => r.Resident.Setting.HouseId.Value == (CurrentUser as Employee).HouseId);
+                }
+
+                if (filterModel.StatusId != null)
+                {
+                    if (filterModel.StatusId.Value != (int)RequestStatus.All)
+                    {
+                        requests = requests.Where(r => r.StatusId == filterModel.StatusId.Value);
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(filterModel.Theme))
+                {
+                    requests = requests.Where(r => r.Theme.Contains(filterModel.Theme));
+                }
+
+                IEnumerable<RequestModel> requestsModels = requests.Skip((filterModel.Page - 1) * pageSize).Take(pageSize)
+                    .Select(r => 
                         new RequestModel()
                         {
                             RequestId = r.Id,
                             Theme = r.Theme,
-                            Status = new StatusModel() { Id = r.Status.Id, Name = r.Status.Name },
+                            Status = new StatusModel() {Id = r.Status.Id, Name = r.Status.Name},
                             Date = r.Date.ToString("g")
-                        });
+                        }
+                    );
                 PageInfo pageInfo = new PageInfo()
                 {
-                    PageNumber = page,
+                    PageNumber = filterModel.Page,
                     PageSize = pageSize,
                     TotalItems = requests.Count()
                 };
@@ -143,7 +208,6 @@ namespace GroupProject.Controllers
                     Requests = requestsModels,
                     PageInfo = pageInfo
                 };
-                ViewData["currentUser"] = CurrentUser;
                 return PartialView("_RequestsGrid", requestsModel);
             }
             catch (Exception e)
@@ -233,6 +297,7 @@ namespace GroupProject.Controllers
                     {
                         directory.Create();
                         request.File = currentRequestDirectory;
+                        DatabaseContext.SaveChanges();
                     }
                     foreach (var file in model.Files)
                     {
@@ -314,6 +379,7 @@ namespace GroupProject.Controllers
                     {
                         directory.Create();
                         reply.File = currentReplyDirectory;
+                        DatabaseContext.SaveChanges();
                     }
 
                     foreach (var file in model.Files)

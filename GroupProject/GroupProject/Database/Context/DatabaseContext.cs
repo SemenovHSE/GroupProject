@@ -13,7 +13,6 @@ namespace GroupProject.Database.Context
         }
 
         public virtual DbSet<Employee> Employees { get; set; }
-        public virtual DbSet<EmployeeInformationBlock> EmployeeInformationBlocks { get; set; }
         public virtual DbSet<House> Houses { get; set; }
         public virtual DbSet<InformationBlock> InformationBlocks { get; set; }
         public virtual DbSet<ManagementCompany> ManagementCompanies { get; set; }
@@ -37,9 +36,20 @@ namespace GroupProject.Database.Context
 
             modelBuilder.Entity<Resident>()
                 .HasMany(e => e.Requests)
-                .WithOptional(e => e.Resident)
-                .WillCascadeOnDelete();
+                .WithRequired(e => e.Resident)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<Setting>()
+                .HasMany(e => e.Residents)
+                .WithRequired(e => e.Setting)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<Status>()
+                .HasMany(e => e.Requests)
+                .WithRequired(e => e.Status)
+                .WillCascadeOnDelete(false);
         }
+
 
         public IPerson GetUser(string phoneNumber)
         {

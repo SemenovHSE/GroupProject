@@ -3,10 +3,12 @@
 
 @if (Model != null)
 {
-    <ul>
-        <li>@Model.FullName</li>
-        <li>@Html.ActionLink("Выход", "Logout", "Menu")</li>
-    </ul>
+    <div class="col-md-5 col-md-offset-7">
+        <div class="form-inline">
+            @Html.ValueFor(u => u.FullName)
+            @Html.ActionLink("Выход", "Logout", "Menu", new { @class = "btn btn-default" })
+        </div>
+    </div>
 }
 
 

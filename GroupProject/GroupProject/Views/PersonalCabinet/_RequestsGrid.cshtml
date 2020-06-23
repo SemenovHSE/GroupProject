@@ -1,108 +1,96 @@
-﻿@using GroupProject.Database.ModelsExtensions
-@using GroupProject.Database.ModelsGenerated
+﻿@using GroupProject.Enums
 @using GroupProject.Helpers
 @using GroupProject.Models
 @model RequestsPageModel
 
-@{
-    IPerson currentUser = ViewData["currentUser"] as IPerson;
-}
-
-<div id="ResidentRequestsContent">
-    <div id="RequestsGridWrapper">
-        <table id="Requests" class="table">
-            <thead>
+<div id="RequestsGridWrapper">
+    <table id="Requests" class="table table-hover">
+        <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(r => r.Requests.FirstOrDefault().RequestId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(r => r.Requests.FirstOrDefault().Theme)
+            </th>
+            <th>
+                @Html.DisplayNameFor(r => r.Requests.FirstOrDefault().Status.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(r => r.Requests.FirstOrDefault().Date)
+            </th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (RequestModel request in Model.Requests)
+        {
             <tr>
-                <th>
-                    @Html.DisplayNameFor(r => r.Requests.FirstOrDefault().RequestId)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(r => r.Requests.FirstOrDefault().Theme)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(r => r.Requests.FirstOrDefault().Status.Name)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(r => r.Requests.FirstOrDefault().Date)
-                </th>
-                <th>
-                    Действие для отображения
-                </th>
+                <td>
+                    @request.RequestId
+                </td>
+                <td>
+                    @request.Theme
+                </td>
+                <td>
+                    <span class="requests-grid-status" statusName="@(((RequestStatus) request.Status.Id).ToString())">@request.Status.Name</span>
+                </td>
+                <td>
+                    @request.Date
+                </td>
+                <td>
+                    <button class="show-request-progress btn btn-info" requestId="@request.RequestId">Посмотреть</button>
+                </td>
             </tr>
-            </thead>
-            <tbody>
-                @foreach (RequestModel request in Model.Requests)
-                {
-                    <tr>
-                        <td>
-                            @request.RequestId
-                        </td>
-                        <td>
-                            @request.Theme
-                        </td>
-                        <td>
-                            @request.Status.Name
-                        </td>
-                        <td>
-                            @request.Date
-                        </td>
-                        <td>
-                            <button class="show-request-progress" requestId="@request.RequestId">Посмотреть</button>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-        <div id="Pages" class="btn-group">
-            @Html.PageLinks(Model.PageInfo)
-        </div>
+        }
+        </tbody>
+    </table>
+    <div id="Pages" class="btn-group">
+        @Html.PageLinks(Model.PageInfo)
     </div>
-    @if (currentUser is Resident)
-    {
-        <button id="ShowSendRequest">Подать заявку</button>
-    }
 </div>
 
 <script type="text/javascript">
     $(document).ready(function() {
-        $("#ShowSendRequest").on("click",
-            function() {
-                $("#ContentWrapper").load("@Url.Action("RenderSendRequest")");
+        $("[page]").each(function(index, element) {
+                $(element).on("click",
+                    function() {
+                        var pageToOpen = parseInt($(element).attr("page"), 10);
+                        filterPanelData.Page = pageToOpen;
+                        $.ajax({
+                            url: "@Url.Action("RenderRequestsGrid")",
+                            type: "GET",
+                            data: filterPanelData,
+                            success: function(data) {
+                                $("#RequestsGridWrapper").replaceWith(data);
+                                initializeActions();
+                            }
+                        });
+                    });
             });
 
-        $("[page]").each(function(index, element) {
-            $(element).on("click",
-                function() {
-                    var pageToOpen = parseInt($(element).attr("page"), 10);
-                    $.ajax({
-                        url: "@Url.Action("RenderRequestsGrid")",
-                        type: "GET",
-                        data: {
-                            page: pageToOpen
-                        },
-                        success: function(data) {
-                            $("#ResidentRequestsContent").replaceWith(data);
-                        }
+            $(".show-request-progress").each(function(index, element) {
+                $(element).on("click",
+                    function() {
+                        var requestIdToShow = parseInt($(element).attr("requestId"), 10);
+                        $.ajax({
+                            url: "@Url.Action("GetRequestProgress")",
+                            type: "GET",
+                            data: {
+                                requestId: requestIdToShow
+                            },
+                            success: function(data) {
+                                $("#ResidentRequestsContent").hide();
+                                $("#ContentWrapper").append(data);
+                            }
+                        });
                     });
-                });
-        });
+            });
 
-        $(".show-request-progress").each(function(index, element) {
-            $(element).on("click",
-                function() {
-                    var requestIdToShow = parseInt($(element).attr("requestId"), 10);
-                    $.ajax({
-                        url: "@Url.Action("GetRequestProgress")",
-                        type: "GET",
-                        data: {
-                            requestId: requestIdToShow
-                        },
-                        success: function(data) {
-                            $("#ResidentRequestsContent").hide();
-                            $("#ContentWrapper").append(data);
-                        }
-                    });
-                });
-        });
+            $(".requests-grid-status").each(function(index, element) {
+                var statusColour = getStatusColour($(element).attr("statusName"));
+                $(element).addClass(getStatusColour(statusColour));
+            });
     });
+    
 </script>

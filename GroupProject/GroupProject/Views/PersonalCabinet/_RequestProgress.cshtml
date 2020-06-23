@@ -10,35 +10,48 @@
     int requestStatusId = Model.Request.Status.Id;
 }
 
-<div id="RequestProgressContent">
-    @if (currentUser is Employee && requestStatusId != (int)RequestStatus.Closed)
+<div id="RequestProgressContent" class="col-md-8">
+    <div class="row">
+        <button id="BackToRequests" class="btn btn-info btn-sm">Назад к запросам</button>
+    </div>
+    <br />
+    @if (currentUser is Employee && requestStatusId != (int) RequestStatus.Closed)
     {
-        <button id="CloseRequest">Закрыть заявку</button>
+        <div class="row">
+            <button id="CloseRequest" class="btn center-block btn-lg">Закрыть заявку</button>
+        </div>
     }
     <div id="RequestContent">
-        <div id="RequestStatus">
-            @Model.Request.Status.Name
+        <div id="RequestStatus" class="row">
+            <b>Статус заявки:</b><span class="request-progress-status">@Model.Request.Status.Name</span>
         </div>
-        <div id="Request">
-            @Model.Request.ResidentFullName
-            <br/>
-            @Model.Request.Date
-            <br/>
-            @Model.Request.Theme
-            <br/>
-            @Model.Request.Body
-            <br/>
-            @foreach (string fileName in Model.Request.Files)
-            {
-                string pathToFile = "\\Request_" + Model.Request.RequestId + "\\" + fileName;
-                @Html.ActionLink(fileName, "GetImage", new {filePath = pathToFile}, new {target = "_blank"})
-                <br/>
-            }
+        <div class="row">
+            <div id="Request">
+                <h4>Заявка №@Model.Request.RequestId</h4>
+                Создатель заявки: @Model.Request.ResidentFullName
+                <br />
+                Дата создания: @Model.Request.Date
+                <br />
+                Тема: @Model.Request.Theme
+                <br />
+                Заявка: @Model.Request.Body
+                <br />
+                @if (Model.Request.Files.Any())
+                {
+                    <span>Прикрепленные файлы:</span>
+                    foreach(string fileName in Model.Request.Files)
+                    {
+                        string pathToFile = "\\Request_" + Model.Request.RequestId + "\\" + fileName;
+                        @Html.ActionLink(fileName, "GetImage", new { filePath = pathToFile }, new {target = "_blank"})
+                        <br />
+                    }
+                }
+            </div>
         </div>
-        <div id="Replies">
+        <div id="Replies" class="row">
             @foreach (ReplyModel reply in Model.Replies)
             {
-                <div>
+                <div class="reply">
                     @reply.EmployeeFullName
                     <br/>
                     @reply.Date
@@ -55,11 +68,12 @@
             }
         </div>
     </div>
-    @if (currentUser is Employee && requestStatusId != (int)RequestStatus.Closed)
+    @if (currentUser is Employee && requestStatusId != (int) RequestStatus.Closed)
     {
-        <button id="AnswerInRequest">Ответить на заявку</button>
+        <div class="row">
+            <button id="AnswerInRequest" class="btn btn-primary center-block btn-lg">Ответить на заявку</button>
+        </div>
     }
-    <button id="BackToRequests">Назад к запросам</button>
 </div>
 
 <script type="text/javascript">
@@ -77,6 +91,14 @@
                         if (data.result) {
                             alert("Заявка была успешно закрыта!");
                             $.ajax({
+                                url: "@Url.Action("RenderRequests")",
+                                type: "GET",
+                                data: filterPanelData,
+                                success: function(data) {
+                                    $("#RequestsGridWrapper").replaceWith(data);
+                                }
+                            });
+                            $.ajax({
                                 url: "@Url.Action("GetRequestProgress")",
                                 type: "GET",
                                 data: {
@@ -85,14 +107,12 @@
                                 success: function(data) {
                                     if (data) {
                                         $("#RequestProgressContent").replaceWith(data);
-                                    }
-                                    else {
+                                    } else {
                                         alert("Произошла ошибка при обновлении информации о заявке");
                                     }
                                 }
                             });
-                        }
-                        else {
+                        } else {
                             alert("Во время закрытия заявки произошла ошибка");
                         }
                     }
@@ -114,12 +134,29 @@
             });
 
         $("#BackToRequests").on("click",
-            function () {
+            function() {
                 $("#ContentWrapper #RequestProgressContent").remove();
                 $("#ResidentRequestsContent").show();
             });
-    });
-    
 
-   
+        $(".request-progress-status").addClass(getStatusColour("@(((RequestStatus)Model.Request.Status.Id).ToString())"));
+    });
+
+    function getStatusColour(statusName) {
+        debugger;
+        var colour = "";
+        switch (statusName) {
+            case "Waiting":
+                colour = "request-status-waiting";
+                break;
+            case "UnderConsideration":
+                colour = "request-status-under-consideration";
+                break;
+            case "Closed":
+                colour = "request-status-closed";
+                break;
+        }
+        return colour;
+    }
+
 </script>

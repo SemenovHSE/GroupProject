@@ -1,2 +1,49 @@
 ﻿body {
 }
+
+button.subscribe {
+    background-color: greenyellow;
+}
+
+button.unsubscribe {
+    background-color: orangered;
+}
+
+button.edit-information-block {
+    background-color: lightgray;
+}
+
+button.remove-information-block {
+    background-color: lightcoral;
+}
+
+#CloseRequest {
+    background-color: tomato;
+}
+
+#RequestStatus {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.request-status-waiting {
+    background-color: aliceblue;
+}
+
+.request-status-under-consideration {
+    background-color: orange;
+}
+
+.request-status-closed {
+    background-color: grey;
+}
+
+#Request {
+    background-color: lightblue;
+}
+
+.reply {
+    background-color: lightgreen;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}

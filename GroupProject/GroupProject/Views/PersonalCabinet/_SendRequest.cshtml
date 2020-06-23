@@ -2,19 +2,21 @@
 @model SendRequestModel
 
 <div>
-    @Html.LabelFor(r => r.Theme)
-    <br/>
-    @Html.TextBoxFor(r => r.Theme)
-    <br/>
-    @Html.LabelFor(r => r.Body)
-    <br/>
-    @Html.TextAreaFor(r => r.Body)
-    <br/>
-    @Html.LabelFor(r => r.Files)
-    <br />
-    <input type="file" id="Files" multiple/>
-    <br />
-    <button id="SendRequest">Подать заявку</button>
+    <div class="form-group col-md-4">
+        <div class="form-group">
+            @Html.LabelFor(r => r.Theme)
+            @Html.TextBoxFor(r => r.Theme, new { @class = "form-control" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(r => r.Body)
+            @Html.TextAreaFor(r => r.Body, new { @class = "form-control", rows = "5" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(r => r.Files)
+            <input type="file" id="Files" class="form-control" multiple />
+        </div>
+        <button id="SendRequest" class="btn btn-primary btn-lg center-block">Подать заявку</button>
+    </div>
 </div>
 
 <script type="text/javascript">

@@ -14,7 +14,7 @@ namespace GroupProject.Database.ModelsGenerated
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Employee()
         {
-            EmployeeInformationBlocks = new HashSet<EmployeeInformationBlock>();
+            InformationBlocks = new HashSet<InformationBlock>();
             Replies = new HashSet<Reply>();
         }
 
@@ -45,7 +45,7 @@ namespace GroupProject.Database.ModelsGenerated
         public virtual Post Post { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<EmployeeInformationBlock> EmployeeInformationBlocks { get; set; }
+        public virtual ICollection<InformationBlock> InformationBlocks { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Reply> Replies { get; set; }
