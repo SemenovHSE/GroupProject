@@ -1,0 +1,67 @@
+﻿@using GroupProject.Helpers
+@using GroupProject.Models
+@model ViewInformationBlockPageModel
+
+<div id="InformationBlocksPage">
+    @foreach (ViewInformationBlockModel informationBlock in Model.InformationBlocks)
+    {
+    <div class="information-block">
+        @Html.DisplayNameFor(b => b.InformationBlocks.FirstOrDefault().Date)
+        <br />
+        @informationBlock.Date
+        <br />
+        @Html.DisplayNameFor(b => b.InformationBlocks.FirstOrDefault().Tags)
+        <br />
+        <span>@string.Join(", ", informationBlock.Tags)</span>
+        <br />
+        @Html.DisplayNameFor(b => b.InformationBlocks.FirstOrDefault().Title)
+        <br />
+        @informationBlock.Title
+        <br />
+        @Html.DisplayNameFor(b => b.InformationBlocks.FirstOrDefault().Body)
+        <br />
+        @informationBlock.Body
+        <br />
+        @Html.DisplayNameFor(b => b.InformationBlocks.FirstOrDefault().Files)
+        <br />
+        @if (informationBlock.Files.Any())
+        {
+            foreach (string fileName in informationBlock.Files)
+            {
+                string pathToFile = "\\InformationBlock_" + informationBlock.Id + "\\" + fileName;
+                @Html.ActionLink(fileName, "GetImage", new { filePath = pathToFile }, new { target = "_blank" })
+                <br />
+            }
+        }
+
+    </div>
+    }
+    <div id="Pages" class="btn-group">
+        @Html.PageLinks(Model.PageInfo)
+    </div>
+</div>
+
+<script type="text/javascript">
+    function renderInformationBlocks(pageToOpen) {
+        $.ajax({
+            url: "@Url.Action("RenderInformationBlocksPage")",
+            type: "GET",
+            data: {
+                page: pageToOpen
+            },
+            success: function(data) {
+                $("#InformationBlocksContent").replaceWith(data);
+            }
+        });
+
+        $(document).ready(function() {
+            $("[page]").each(function(index, element) {
+                $(element).on("click",
+                    function() {
+                        var pageToOpen = parseInt($(element).attr("page"), 10);
+                        renderInformationBlocks(pageToOpen);
+                    });
+            });
+        });
+    }
+</script>

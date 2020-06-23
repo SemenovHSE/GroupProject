@@ -3,5 +3,8 @@
 
 @if (Model != null)
 {
-    <div>Закрепленный дом: @Model.Address</div>
+    <div class="form-group col-md-7">
+        <label for="Address" class="control-label">Закрепленный дом</label>
+        @Html.TextBoxFor(h => h.Address, new { @class = "form-control", @readonly = "readonly" })
+    </div>
 }

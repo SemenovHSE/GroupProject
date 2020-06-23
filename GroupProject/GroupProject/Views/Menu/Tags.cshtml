@@ -1,0 +1,15 @@
+﻿
+@{
+    ViewBag.Title = "Tags";
+}
+
+<body>
+<div id="ContentWrapper"></div>
+</body>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#ContentWrapper").load("@Url.Action("RenderTagsGrid")");
+    });
+</script>
+

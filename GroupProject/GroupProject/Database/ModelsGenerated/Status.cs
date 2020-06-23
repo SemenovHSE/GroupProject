@@ -14,6 +14,7 @@ namespace GroupProject.Database.ModelsGenerated
             Requests = new HashSet<Request>();
         }
 
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
 
         [Required]

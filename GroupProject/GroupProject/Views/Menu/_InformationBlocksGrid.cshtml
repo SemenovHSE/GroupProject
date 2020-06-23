@@ -1,0 +1,133 @@
+﻿@using GroupProject.Helpers
+@using GroupProject.Models
+@model InformationBlockGridPageModel
+
+<div id="InformationBlocksContent">
+    <div id="InformationBlocksGridWrapper">
+        <table id="InformationBlocks" class="table table-hover">
+            <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(b => b.InformationBlocks.FirstOrDefault().Id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(b => b.InformationBlocks.FirstOrDefault().Title)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(b => b.InformationBlocks.FirstOrDefault().Date)
+                </th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (InformationBlockGridModel informationBlock in Model.InformationBlocks)
+            {
+                <tr informationBlockId="@informationBlock.Id">
+                    <td>
+                        @informationBlock.Id
+                    </td>
+                    <td>
+                        @informationBlock.Title
+                    </td>
+                    <td>
+                        @informationBlock.Date
+                    </td>
+                    <td>
+                        <button class="edit-information-block btn">Изменить</button>
+                    </td>
+                    <td>
+                        <button class="remove-information-block btn">Удалить</button>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+        <div id="Pages" class="btn-group">
+            @Html.PageLinks(Model.PageInfo)
+        </div>
+    </div>
+    <button id="CreateNewInformationBlock" class="btn btn-primary btn-lg center-block">Добавить новость</button>
+</div>
+
+<script type="text/javascript">
+    function renderInformationBlocks(pageToOpen) {
+        $.ajax({
+            url: "@Url.Action("RenderInformationBlocksGrid")",
+            type: "GET",
+            data: {
+                page: pageToOpen
+            },
+            success: function(data) {
+                $("#InformationBlocksContent").replaceWith(data);
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        $("[page]").each(function(index, element) {
+            $(element).on("click",
+                function() {
+                    var pageToOpen = parseInt($(element).attr("page"), 10);
+                    renderInformationBlocks(pageToOpen);
+                });
+        });
+
+        $(".edit-information-block").each(function(index, element) {
+            $(element).on("click",
+                function() {
+                    var informationBlockToEdit = parseInt($($(element).closest("tr")[0]).attr("informationBlockId"), 10);
+                    $.ajax({
+                        url: "@Url.Action("RenderInformationBlock")",
+                        type: "GET",
+                        data: {
+                            informationBlockId: informationBlockToEdit
+                        },
+                        success: function(data) {
+                            $("#InformationBlocksContent").hide();
+                            $("#ContentWrapper").append(data);
+                        }
+                    });
+                });
+        });
+
+        $(".remove-information-block").each(function(index, element) {
+            $(element).on("click",
+                function() {
+                    var informationBlockToRemove = parseInt($($(element).closest("tr")[0]).attr("informationBlockId"), 10);
+                    $.ajax({
+                        url: "@Url.Action("RemoveInformationBlock")",
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            informationBlockId: informationBlockToRemove
+                        },
+                        success: function(data) {
+                            if (data.result) {
+                                alert("Новость успешно удалена!");
+                                location.reload();
+                            }
+                            else {
+                                alert("Во время удаления новости произошла ошибка");
+                            }
+                        }
+                    });
+                });
+        });
+
+        $("#CreateNewInformationBlock").on("click",
+            function() {
+                $.ajax({
+                    url: "@Url.Action("RenderInformationBlock")",
+                    type: "GET",
+                    data: {
+                        informationBlockId: null
+                    },
+                    success: function(data) {
+                        $("#InformationBlocksContent").hide();
+                        $("#ContentWrapper").append(data);
+                    }
+                });
+            });
+    });
+</script>

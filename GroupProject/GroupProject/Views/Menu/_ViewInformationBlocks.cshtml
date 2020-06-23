@@ -1,0 +1,58 @@
+﻿@using GroupProject.Helpers
+@using GroupProject.Models
+
+<div id="InformationBlocksContent">
+    <div class="row">
+        <div id="FilterPanel" class="form-group">
+            <div class="form-group">
+                <div class="radio">
+                    <label class="radio-inline">
+                        @Html.RadioButton("FilterByUserTags", true, true) Новости по тегам, на которые я подписан
+                    </label>
+                    <label class="radio-inline">
+                        @Html.RadioButton("FilterByUserTags", false, false) Все новости
+                    </label>
+                </div>
+            </div>
+            <button id="Filter" class="btn btn-default">Отфильтровать</button>
+        </div>
+    </div>
+    <div class="row">
+        <div id="InformationBlocksPage"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var filterPanelData = {
+        UserTags: true,
+        Page: 1
+    };
+
+    $(document).ready(function() {
+        $.ajax({
+            url: "@Url.Action("RenderInformationBlocksPage")",
+            type: "GET",
+            data: filterPanelData,
+            success: function(data) {
+                $("#InformationBlocksPage").replaceWith(data);
+            }
+        });
+
+        $("#Filter").on("click",
+            function() {
+                var filterData = {
+                    UserTags: $("#FilterByUserTags:checked").val() === "True",
+                    Page: 1
+                };
+                $.ajax({
+                    url: "@Url.Action("RenderInformationBlocksPage")",
+                    type: "GET",
+                    data: filterData,
+                    success: function(data) {
+                        $("#InformationBlocksPage").replaceWith(data);
+                        filterPanelData = filterData;
+                    }
+                });
+            });
+    });
+</script>

@@ -2,15 +2,17 @@
 @model SendReplyModel
 
 <div id="ReplyContent">
-    @Html.LabelFor(r => r.Body)
-    <br />
-    @Html.TextAreaFor(r => r.Body)
-    <br />
-    @Html.LabelFor(r => r.Files)
-    <br />
-    <input type="file" id="Files" multiple/>
-    <br />
-    <button id="SendReply">Ответить на заявку</button>
+    <div class="form-group">
+        <div class="form-group">
+            @Html.LabelFor(r => r.Body)
+            @Html.TextAreaFor(r => r.Body, new { @class = "form-control", rows = "5" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(r => r.Files)
+            <input type="file" id="Files" class="form-control" multiple />
+        </div>
+        <button id="SendReply" class="btn btn-primary center-block">Ответить на заявку</button>
+    </div>
 </div>
 
 <script type="text/javascript">

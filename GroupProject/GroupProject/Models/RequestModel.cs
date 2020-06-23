@@ -28,5 +28,10 @@ namespace GroupProject.Models
 
         [Display(Name = "Дата и время создания")]
         public string Date { get; set; }
+
+        public RequestModel()
+        {
+            Files = new List<string>();
+        }
     }
 }

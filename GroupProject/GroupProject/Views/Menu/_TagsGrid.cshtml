@@ -1,0 +1,106 @@
+﻿@using GroupProject.Helpers
+@using GroupProject.Models
+@model MenuTagsPageModel
+
+<div id="TagsContent">
+    <div id="TagsGridWrapper">
+        <table id="Tags" class="table table-hover">
+            <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(t => t.Tags.FirstOrDefault().TagId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(t => t.Tags.FirstOrDefault().Name)
+                </th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (MenuTagModel tag in Model.Tags)
+            {
+                <tr>
+                    <td>
+                        @tag.TagId
+                    </td>
+                    <td>
+                        <input class="tag-name form-control" value="@tag.Name"/>
+                    </td>
+                    <td>
+                        <button class="update btn btn-info" tagId="@tag.TagId">Редактировать</button>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+        <div id="Pages" class="btn-group">
+            @Html.PageLinks(Model.PageInfo)
+        </div>
+    </div>
+    <button id="CreateNewTag" class="btn btn-primary btn-lg center-block">Добавить тег</button>
+</div>
+
+<script type="text/javascript">
+    function renderTags(pageToOpen) {
+        $.ajax({
+            url: "@Url.Action("RenderTagsGrid")",
+            type: "GET",
+            data: {
+                page: pageToOpen
+            },
+            success: function(data) {
+                $("#TagsContent").replaceWith(data);
+            }
+        });
+    }
+
+
+    $(document).ready(function() {
+        $("[page]").each(function(index, element) {
+            $(element).on("click",
+                function() {
+                    var pageToOpen = parseInt($(element).attr("page"), 10);
+                    renderTags(pageToOpen);
+                });
+        });
+
+        $(".update").each(function(index, element) {
+            $(element).on("click",
+                function() {
+                    var tagToUpdate = parseInt($(element).attr("tagId"), 10);
+                    var tag = {
+                        TagId: tagToUpdate,
+                        Name: $($(element).closest("tr").find(".tag-name")[0]).val()
+                    };
+                    $.ajax({
+                        url: "@Url.Action("UpdateTag")",
+                            type: "POST",
+                            dataType: "json",
+                            data: {
+                                tagModel: tag
+                            },
+                            success: function(data) {
+                                if (data.result){
+                                    alert("Тег был успешно обновлен!");
+                                }
+                                else {
+                                    alert("Во время обновления тега произошла ошибка");
+                                }
+                            }
+                        });
+                    });
+            });
+
+        $("#CreateNewTag").on("click",
+            function() {
+                $.ajax({
+                    url: "@Url.Action("RenderCreateTag")",
+                    type: "GET",
+                    success: function(data) {
+                        $("#TagsContent").hide();
+                        $("#ContentWrapper").append(data);
+                    }
+                });
+            });
+    });
+</script>

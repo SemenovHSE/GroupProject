@@ -1,9 +1,7 @@
 ﻿@using GroupProject.Models
 @model RegistrationModel
 @{
-    ViewBag.Title = "Register";
-    //Layout = "~/Views/Shared/_Layout.cshtml";
-    List<string> addresses = (ViewData["Addresses"] as List<string>) ?? new List<string>();
+    List<string> addresses = (ViewData["addresses"] as List<string>) ?? new List<string>();
     IEnumerable<SelectListItem> addressesItems = addresses.Select(a => new SelectListItem()
     {
         Text = a,
@@ -11,50 +9,51 @@
     });
 }
 
-<h2>Register</h2>
 <body>
-    @using (Html.BeginForm("Register", "Menu", FormMethod.Post))
+    @using (Html.BeginForm("Register", "Menu", FormMethod.Post, new { @class = "form-group col-md-4 col-md-offset-4" }))
     {
-        @Html.LabelFor(r => r.Surname)
-        <br />
-        @Html.TextBoxFor(r => r.Surname)
-        @Html.ValidationMessageFor(r => r.Surname)
-        <br />
-        @Html.LabelFor(r => r.Name)
-        <br />
-        @Html.TextBoxFor(r => r.Name)
-        @Html.ValidationMessageFor(r => r.Name)
-        <br />
-        @Html.LabelFor(r => r.Patronymic)
-        <br />
-        @Html.TextBoxFor(r => r.Patronymic)
-        @Html.ValidationMessageFor(r => r.Patronymic)
-        <br />
-        @Html.LabelFor(r => r.PhoneNumber)
-        <br />
-        @Html.TextBoxFor(r => r.PhoneNumber)
-        @Html.ValidationMessageFor(r => r.PhoneNumber)
-        <br />
-        @Html.LabelFor(r => r.Password)
-        <br />
-        @Html.PasswordFor(r => r.Password)
-        @Html.ValidationMessageFor(r => r.Password)
-        <br />
-        @Html.LabelFor(r => r.Address)
-        <br />
-        @Html.DropDownListFor(r => r.Address, addressesItems)
-        @Html.ValidationMessageFor(r => r.Address)
-        <br />
-        @Html.LabelFor(r => r.Entrance)
-        <br />
-        @Html.TextBoxFor(r => r.Entrance)
-        @Html.ValidationMessageFor(r => r.Entrance)
-        <br />
-        @Html.LabelFor(r => r.SettingNumber)
-        <br />
-        @Html.TextBoxFor(r => r.SettingNumber)
-        @Html.ValidationMessageFor(r => r.SettingNumber)
-        <br />
-        <input type="submit" value="Зарегистрироваться"/>
+        <div class="form-group">
+            @Html.LabelFor(r => r.Surname)
+            @Html.TextBoxFor(r => r.Surname, new { @class = "form-control" })
+            @Html.ValidationMessageFor(r => r.Surname)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(r => r.Name)
+            @Html.TextBoxFor(r => r.Name, new { @class = "form-control" })
+            @Html.ValidationMessageFor(r => r.Name)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(r => r.Patronymic)
+            @Html.TextBoxFor(r => r.Patronymic, new { @class = "form-control" })
+            @Html.ValidationMessageFor(r => r.Patronymic)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(r => r.PhoneNumber)
+            @Html.TextBoxFor(r => r.PhoneNumber, new { @class = "form-control" })
+            @Html.ValidationMessageFor(r => r.PhoneNumber)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(r => r.Password)
+            @Html.PasswordFor(r => r.Password, new { @class = "form-control" })
+            @Html.ValidationMessageFor(r => r.Password)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(r => r.Address)
+            @Html.DropDownListFor(r => r.Address, addressesItems, new { @class = "form-control" })
+            @Html.ValidationMessageFor(r => r.Address)
+        </div>
+        <div class="row">
+            <div class="form-group col-md-6">
+                @Html.LabelFor(r => r.Entrance)
+                @Html.TextBoxFor(r => r.Entrance, new { @class = "form-control" })
+                @Html.ValidationMessageFor(r => r.Entrance)
+            </div>
+            <div class="form-group col-md-6">
+                @Html.LabelFor(r => r.SettingNumber)
+                @Html.TextBoxFor(r => r.SettingNumber, new { @class = "form-control" })
+                @Html.ValidationMessageFor(r => r.SettingNumber)
+            </div>
+        </div>
+        <input type="submit" value="Зарегистрироваться" class="btn btn-primary center-block"/>
     }
 </body>

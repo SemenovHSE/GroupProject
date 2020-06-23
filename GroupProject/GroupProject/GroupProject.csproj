@@ -158,7 +158,6 @@
     <Compile Include="Controllers\PersonalCabinetController.cs" />
     <Compile Include="Database\Context\DatabaseContext.cs" />
     <Compile Include="Database\ModelsGenerated\Employee.cs" />
-    <Compile Include="Database\ModelsGenerated\EmployeeInformationBlock.cs" />
     <Compile Include="Database\ModelsGenerated\House.cs" />
     <Compile Include="Database\ModelsGenerated\InformationBlock.cs" />
     <Compile Include="Database\ModelsGenerated\ManagementCompany.cs" />
@@ -184,9 +183,17 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\CreateEditInformationBlockModel.cs" />
+    <Compile Include="Models\CreateTagModel.cs" />
     <Compile Include="Models\EmployeeGeneralInformationModel.cs" />
     <Compile Include="Models\HouseModel.cs" />
+    <Compile Include="Models\InformationBlockGridModel.cs" />
+    <Compile Include="Models\InformationBlockGridPageModel.cs" />
+    <Compile Include="Models\InformationBlockModel.cs" />
+    <Compile Include="Models\InformationBlockPageFilterModel.cs" />
     <Compile Include="Models\MenuTagModel.cs" />
+    <Compile Include="Models\MenuTagsPageModel.cs" />
+    <Compile Include="Models\RequestsPageFilterModel.cs" />
     <Compile Include="Models\ResidentGeneralInformationModel.cs" />
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\PageInfo.cs" />
@@ -202,6 +209,8 @@
     <Compile Include="Models\SettingModel.cs" />
     <Compile Include="Models\PersonalCabinetTagModel.cs" />
     <Compile Include="Models\PersonalCabinetTagsPageModel.cs" />
+    <Compile Include="Models\ViewInformationBlockModel.cs" />
+    <Compile Include="Models\ViewInformationBlockPageModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -350,7 +359,6 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Shared\_LayoutTest.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
@@ -362,14 +370,25 @@
     <Content Include="Views\Menu\Register.cshtml" />
     <Content Include="Views\PersonalCabinet\_ResidentGeneralInformation.cshtml" />
     <Content Include="Views\PersonalCabinet\_SendRequest.cshtml" />
-    <Content Include="Views\PersonalCabinet\TEst.cshtml" />
     <Content Include="Views\PersonalCabinet\_TagsGrid.cshtml" />
     <Content Include="Views\PersonalCabinet\_RequestProgress.cshtml" />
     <Content Include="Views\PersonalCabinet\_UserInformation.cshtml" />
     <Content Include="Views\PersonalCabinet\_EmployeeGeneralInformation.cshtml" />
-    <Content Include="Views\PersonalCabinet\_RequestsGrid.cshtml" />
+    <Content Include="Views\PersonalCabinet\_Requests.cshtml" />
     <Content Include="Views\Shared\_HouseInformation.cshtml" />
     <Content Include="Views\PersonalCabinet\_SendReply.cshtml" />
+    <Content Include="Views\Menu\Tags.cshtml" />
+    <Content Include="Views\Menu\_TagsGrid.cshtml" />
+    <Content Include="Views\Menu\_CreateTag.cshtml" />
+    <Content Include="Views\Menu\_InformationBlocksGrid.cshtml" />
+    <Content Include="Views\Menu\_CreateEditInformationBlock.cshtml" />
+    <Content Include="Views\Menu\InformationBlocks.cshtml" />
+    <Content Include="Views\Menu\_ViewInformationBlocks.cshtml" />
+    <Content Include="Views\PersonalCabinet\_RequestsGrid.cshtml" />
+    <Content Include="Views\Menu\FinancialStatements.cshtml" />
+    <Content Include="Views\Menu\Deptors.cshtml" />
+    <Content Include="Views\Menu\Contacts.cshtml" />
+    <Content Include="Views\Menu\_ViewInformationBlocksPage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

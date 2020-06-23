@@ -1,0 +1,17 @@
+﻿@using GroupProject.Database.ModelsExtensions
+@using GroupProject.Database.ModelsGenerated
+
+@{
+    ViewBag.Title = "InformationBlocks";
+    IPerson currentUser = ViewData["currentUser"] as IPerson;
+}
+
+<body>
+<div id="ContentWrapper" class="col-md-8 col-md-offset-2"></div>
+</body>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#ContentWrapper").load("@Url.Action(currentUser is Employee ? "RenderInformationBlocksGrid" : "RenderInformationBlocks")");
+    });
+</script>

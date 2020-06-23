@@ -1,4 +1,12 @@
-﻿<!DOCTYPE html>
+﻿@using GroupProject.Database.ModelsExtensions
+@using GroupProject.Database.ModelsGenerated
+
+@{
+    IPerson currentUser = ViewData["currentUser"] as IPerson;
+    string currentLink = ViewData["currentLink"] as string;
+}
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -12,15 +20,24 @@
     @Scripts.Render("~/bundles/bootstrap")
 </head>
 <body>
-<div class="row">
+<div class="container-fluid">
     <div class="col-md-10 col-md-offset-1">
         <h3>Управляющая компания "Название УК"</h3>
         <div class="navbar-collapse collapse">
             <ul class="nav nav-pills">
-                <li class="active">@Html.ActionLink("О нас", "About", "Menu")</li>
-                <li>@Html.ActionLink("Новости", "News", "Menu")</li>
-                <li>@Html.ActionLink("Личный кабинет", "PersonalCabinet", "Menu")</li>
-                <li>@Html.ActionLink("Контакты", "Contacts", "Menu")</li>
+                <li link="About">@Html.ActionLink("О нас", "About", "Menu")</li>
+                <li link="InformationBlocks">@Html.ActionLink("Новости", "InformationBlocks", "Menu")</li>
+                <li link="PersonalCabinet">@Html.ActionLink("Личный кабинет", "PersonalCabinet", "Menu")</li>
+                @if (currentUser != null)
+                {
+                    <li link="FinancialStatements">@Html.ActionLink("Отчетность", "FinancialStatements", "Menu")</li>
+                    <li link="Deptors">@Html.ActionLink("Должники", "Deptors", "Menu")</li>
+                }
+                <li link="Contacts">@Html.ActionLink("Контакты", "Contacts", "Menu")</li>
+                @if (currentUser is Employee)
+                {
+                    <li link="Tags">@Html.ActionLink("Теги", "Tags", "Menu")</li>
+                }
             </ul>
         </div>
         <div>@Html.Action("LoginInformation", "Menu")</div>
@@ -28,13 +45,15 @@
     </div>
 </div>
 
-<div class="row">
+<div class="container-fluid">
     <div class="col-md-10 col-md-offset-1">
         @RenderBody()
     </div>
 </div>
-    <footer>
-        Текущее время: @DateTime.Now
-    </footer>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("li[link='@currentLink'").addClass("active");
+    });
+</script>
 </body>
 </html>

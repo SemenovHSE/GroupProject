@@ -17,9 +17,9 @@ namespace GroupProject.Database.ModelsGenerated
 
         public int Id { get; set; }
 
-        public int? ResidentId { get; set; }
+        public int ResidentId { get; set; }
 
-        public int? StatusId { get; set; }
+        public int StatusId { get; set; }
 
         [Required]
         [StringLength(100)]

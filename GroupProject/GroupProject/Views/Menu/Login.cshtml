@@ -2,24 +2,26 @@
 @model LoginModel
 @{
     ViewBag.Title = "Login";
-    //Layout = "~/Shared/_LayoutMenu.cshtml";
 }
 
-<h2>Login</h2>
 <body>
-    @using(Html.BeginForm("Login", "Menu", FormMethod.Post))
-    {
-        @Html.LabelFor(l => l.PhoneNumber)
-        <br />
-        @Html.TextBoxFor(l => l.PhoneNumber)
-        @Html.ValidationMessageFor(l => l.PhoneNumber)
-        <br />
-        @Html.LabelFor(l => l.Password)
-        <br />
-        @Html.PasswordFor(l => l.Password)
-        @Html.ValidationMessageFor(l => l.Password)
-        <br />
-        <input type="submit" value="Войти" />
-    }
-    @Html.ActionLink("Зарегистрироваться", "Register")
+    <div class="col-md-4 col-md-offset-4">
+        @using (Html.BeginForm("Login", "Menu", FormMethod.Post, new { @class = "form-group" }))
+        {
+            <div class="form-group">
+                @Html.LabelFor(l => l.PhoneNumber)
+                @Html.TextBoxFor(l => l.PhoneNumber, new { @class = "form-control" })
+                @Html.ValidationMessageFor(l => l.PhoneNumber)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(l => l.Password)
+                @Html.PasswordFor(l => l.Password, new { @class = "form-control" })
+                @Html.ValidationMessageFor(l => l.Password)
+            </div>
+            <input type="submit" value="Войти" class="btn btn-primary center-block" />
+        }
+        <div class="col-md-6 col-md-offset-3">
+            @Html.ActionLink("Зарегистрироваться", "Register", null, new { @class = "btn btn-primary center-block" })
+        </div>
+    </div>
 </body>
